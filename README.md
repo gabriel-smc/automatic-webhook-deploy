@@ -49,7 +49,7 @@ Host bitbucket.org
 
 Whenever you do a git fetch Bitbucket will verify your identity automatically, without prompting you for a password.
 
-On the Bitbucket website navigate to your repository's _Administration > Webhooks_ screen and add a new webhook, pointed to `http://<domain>/<path>/bitbucet-hook.php`.
+On the Bitbucket website navigate to your repository's _Administration > Webhooks_ screen and add a new webhook, pointed to `http://<domain>/<path>/bitbucket-hook.php`.
 
 For more detailed information see the [original Jonathan's page](http://jonathannicol.com/blog/2013/11/19/automated-git-deployments-from-bitbucket/), look config file and source code or simply ask me.
 
