@@ -40,7 +40,7 @@ When prompted either accept the default key name (**id_rsa**) or give your key a
 
 A public and private key pair will be generated. Copy your public key — the one with a _.pub_ extension — to the clipboard. On the Bitbucket website navigate to _Account > SSH Keys_, and choose to add a new key. Paste in your public key and save it.
 
-Back on your server, edit your **~/.ssh/config** file to add bitbucket.org as a host. This ensures that the correct key is used when connecting by SSH to bitbucket.org. You'll need to create the config file if it doesn't exist:
+Back on your server, edit your **~/.ssh/config** file to add _bitbucket.org_ as a host. This ensures that the correct key is used when connecting by SSH to _bitbucket.org_. You'll need to create the config file if it doesn't exist:
 
 ```
 Host bitbucket.org
@@ -49,4 +49,7 @@ Host bitbucket.org
 
 Whenever you do a git fetch Bitbucket will verify your identity automatically, without prompting you for a password.
 
-On the Bitbucket website navigate to your repository's _Administration > Webhooks_ screen and add a new webhook, pointed at **http://<domain>/<path>/bitbucet-hook.php**.
+On the Bitbucket website navigate to your repository's _Administration > Webhooks_ screen and add a new webhook, pointed to **http://<domain>/<path>/bitbucet-hook.php**.
+
+For more detailed information see the [original page](http://jonathannicol.com/blog/2013/11/19/automated-git-deployments-from-bitbucket/), look config file and source code or simply ask me.
+
