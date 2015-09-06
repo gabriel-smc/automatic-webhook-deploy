@@ -29,18 +29,18 @@ Documentation is in progress.
 
 For your server to connect securely to Bitbucket without a password prompt, it needs to use an SSH key.
 
-On your server navigate to the ~/.ssh directory of the user that PHP runs under. You will need to create the user's .ssh directory if it doesn't exist. At a shell prompt type:
+On your server navigate to the **~/.ssh** directory of the user that PHP runs under. You will need to create the user's .ssh directory if it doesn't exist. At a shell prompt type:
 
 ```
 cd ~/.ssh
 ssh-keygen -t rsa
 ```
 
-When prompted either accept the default key name (id_rsa) or give your key a unique name. Press enter when asked for a passphrase, which will generate a passwordless key. Usually this isn't recommended, but we need our script to be able to connect to Bitbucket without a passphrase.
+When prompted either accept the default key name (**id_rsa**) or give your key a unique name. Press enter when asked for a passphrase, which will generate a passwordless key. Usually this isn't recommended, but we need our script to be able to connect to Bitbucket without a passphrase.
 
-A public and private key pair will be generated. Copy your public key — the one with a .pub extension — to the clipboard. On the Bitbucket website navigate to Account > SSH Keys, and choose to add a new key. Paste in your public key and save it.
+A public and private key pair will be generated. Copy your public key — the one with a _.pub_ extension — to the clipboard. On the Bitbucket website navigate to _Account > SSH Keys_, and choose to add a new key. Paste in your public key and save it.
 
-Back on your server, edit your ~/.ssh/config file to add bitbucket.org as a host. This ensures that the correct key is used when connecting by SSH to bitbucket.org. YouвЂ™ll need to create the config file if it doesnвЂ™t exist:
+Back on your server, edit your **~/.ssh/config** file to add bitbucket.org as a host. This ensures that the correct key is used when connecting by SSH to bitbucket.org. You'll need to create the config file if it doesn't exist:
 
 ```
 Host bitbucket.org
@@ -49,4 +49,4 @@ Host bitbucket.org
 
 Whenever you do a git fetch Bitbucket will verify your identity automatically, without prompting you for a password.
 
-On the Bitbucket website navigate to your repository's Administration > Webhooks screen and add a new webhook, pointed at **http:/<domain>/<path>/bitbucet-hook.php**.
+On the Bitbucket website navigate to your repository's _Administration > Webhooks_ screen and add a new webhook, pointed at **http://<domain>/<path>/bitbucet-hook.php**.
