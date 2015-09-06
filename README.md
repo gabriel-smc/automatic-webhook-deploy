@@ -1,7 +1,7 @@
 
 # Automatic deployment for bitbucket.org web-based projects
 
-Based on ['Automated git deployment' script](htotp://jonathannicol.com/blog/2013/11/19/automaed-git-deployments-from-bitbucket/) by [Jonathan Nicoal](http://jonathannicol.com/]. See also [BitBucket Sync](https://bitbucket.org/alixandru/bitbucket-sync) by [alixandru](https://bitbucket.org/alixandru/).
+Based on [ «Automated git deployment» script ](htotp://jonathannicol.com/blog/2013/11/19/automaed-git-deployments-from-bitbucket/) by [ Jonathan Nicoal ](http://jonathannicol.com/]. See also [BitBucket Sync](https://bitbucket.org/alixandru/bitbucket-sync) by [alixandru](https://bitbucket.org/alixandru/).
 
 Some fragments of this manual was taken from Jonathan Nicoal's documentation page.
 
@@ -38,7 +38,7 @@ ssh-keygen -t rsa
 
 When prompted either accept the default key name (id_rsa) or give your key a unique name. Press enter when asked for a passphrase, which will generate a passwordless key. Usually this isn't recommended, but we need our script to be able to connect to Bitbucket without a passphrase.
 
-A public and private key pair will be generated. Copy your public key вЂ“ the one with a .pub extension вЂ“ to the clipboard. On the Bitbucket website navigate to Account > SSH Keys, and choose to add a new key. Paste in your public key and save it.
+A public and private key pair will be generated. Copy your public key — the one with a .pub extension — to the clipboard. On the Bitbucket website navigate to Account > SSH Keys, and choose to add a new key. Paste in your public key and save it.
 
 Back on your server, edit your ~/.ssh/config file to add bitbucket.org as a host. This ensures that the correct key is used when connecting by SSH to bitbucket.org. YouвЂ™ll need to create the config file if it doesnвЂ™t exist:
 
