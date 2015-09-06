@@ -1,7 +1,7 @@
 
 # Automatic deployment for bitbucket.org web-based projects
 
-Based on [ «Automated git deployment» script ](htotp://jonathannicol.com/blog/2013/11/19/automaed-git-deployments-from-bitbucket/) by [ Jonathan Nicoal ](http://jonathannicol.com/]. See also [BitBucket Sync](https://bitbucket.org/alixandru/bitbucket-sync) by [alixandru](https://bitbucket.org/alixandru/).
+Based on [ «Automated git deployment» script ](htotp://jonathannicol.com/blog/2013/11/19/automaed-git-deployments-from-bitbucket/) by [ Jonathan Nicoal ](http://jonathannicol.com/). See also [BitBucket Sync](https://bitbucket.org/alixandru/bitbucket-sync) by [alixandru](https://bitbucket.org/alixandru/).
 
 Some fragments of this manual was taken from Jonathan Nicoal's documentation page.
 
