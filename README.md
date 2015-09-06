@@ -38,9 +38,9 @@ ssh-keygen -t rsa
 
 When prompted either accept the default key name (id_rsa) or give your key a unique name. Press enter when asked for a passphrase, which will generate a passwordless key. Usually this isn't recommended, but we need our script to be able to connect to Bitbucket without a passphrase.
 
-A public and private key pair will be generated. Copy your public key вЂ“ the one with a .pub extension вЂ“ to the clipboard. On the Bitbucket website navigate to Account > SSH Keys, and choose to add a new key. Paste in your public key and save it.
+A public and private key pair will be generated. Copy your public key -Ђ“ the one with a .pub extension -Ђ“ to the clipboard. On the Bitbucket website navigate to Account > SSH Keys, and choose to add a new key. Paste in your public key and save it.
 
-Back on your server, edit your ~/.ssh/config file to add bitbucket.org as a host. This ensures that the correct key is used when connecting by SSH to bitbucket.org. YouвЂ™ll need to create the config file if it doesnвЂ™t exist:
+Back on your server, edit your ~/.ssh/config file to add bitbucket.org as a host. This ensures that the correct key is used when connecting by SSH to bitbucket.org. You-Ђ™ll need to create the config file if it doesn'Ђ™t exis
 
 ```
 Host bitbucket.org
