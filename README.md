@@ -9,7 +9,7 @@ Documentation is in progress.
 
 ## Changes:
 
-- Fixed new bitbucket.org webhooks interface (stream instead of POST). See (discussion)[https://bitbucket.org/alixandru/bitbucket-sync/issues/34/bitbucket-api-change-breaks-gatewayphp#comment-None] at bibucket another synchronizator `bitbucket-sync` by (alexandru)[http://bitbucket.org/alixandru/] .
+- Fixed new bitbucket.org webhooks interface (stream instead of POST). See [discussion](https://bitbucket.org/alixandru/bitbucket-sync/issues/34/bitbucket-api-change-breaks-gatewayphp#comment-None) at bibucket another synchronizator `bitbucket-sync` by [alexandru](http://bitbucket.org/alixandru/) .
 
 - Added support for multiple projects. See array `$PROJECTS` in **CONFIG.php**.
 
