@@ -145,7 +145,7 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
 
 	// Log the deployment
 	$hash = rtrim( shell_exec('cd '.$repoPath.' && '.$CONFIG['gitCommand'].' rev-parse --short HEAD') );
-	_LOG("Done, commit hash: ".$hash);
+	_LOG("Done, commit #".$hash);
 
 }/*}}}*/
 
