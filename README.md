@@ -12,7 +12,7 @@ Documentation is in progress.
 
 ## Changes/features
 
-- Fixed new bitbucket.org webhooks interface (stream instead of POST). See [discussion](https://bitbucket.org/alixandru/bitbucket-sync/issues/34/bitbucket-api-change-breaks-gatewayphp#comment-None) on another synchronizator _bitbucket-sync_ by [alixandru](https://bitbucket.org/alixandru/).
+- Fixed new bitbucket.org webhooks interface (stream instead of POST). See [discussion](https://bitbucket.org/alixandru/bitbucket-sync/issues/34/bitbucket-api-change-breaks-gatewayphp) on another synchronizator _bitbucket-sync_ by [alixandru](https://bitbucket.org/alixandru/).
 - Added support for multiple projects. See array `$PROJECTS` in **CONFIG.php**.
 - Optional fetching or cloning repositiories demand on their presence.
 - Project and repository folders automaticly creating if they're not exists. (You need no to create empty folders before operations and can to reset and initiate full reload by simply removing entire repository/project folders.)
