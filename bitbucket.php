@@ -143,6 +143,10 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
 	$branch = ( !empty($PROJECTS[$REPO]['branch']) ) ? $PROJECTS[$REPO]['branch']: DEFAULT_BRANCH;
 	exec('cd '.$repoPath.' && GIT_WORK_TREE='.$PROJECTS[$REPO]['projPath'].' '.$CONFIG['gitCommand'].' checkout -f '.$branch);
 
+	if ( !empty($PROJECTS[$REPO]['postHookCmd']) ) {
+		exec('cd '.$PROJECTS[$REPO]['projPath'].' && '.$PROJECTS[$REPO]['postHookCmd']);
+	}
+
 	// Log the deployment
 	$hash = rtrim( shell_exec('cd '.$repoPath.' && '.$CONFIG['gitCommand'].' rev-parse --short HEAD') );
 	_LOG("Done, commit #".$hash);

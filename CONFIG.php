@@ -38,9 +38,20 @@ $CONFIG = array(
 
 // List of deploying projects:
 $PROJECTS = array(
-	'golden-mysite' => array( // The key is a bitbucket.org repository name
-		'projPath' => $PROJECTS_PATH.'mysite/', // Path to deploy project, *REQUIRED*
-		'branch' => 'master', // Deploing branch, optional
+	// 'repo-name' => array( // The key is a bitbucket.org repository name
+	// 	'projPath' => $PROJECTS_PATH.'deploy_path/', // Path to deploy project, *REQUIRED*
+	// 	// 'postHookCmd' => 'your_command', // command to execute after deploy, optional
+	// 	// 'branch' => 'master', // Deploing branch, optional
+	// ),
+	'golden-mysite' => array(
+		'projPath' => $PROJECTS_PATH.'mysite2/',
+		'postHookCmd' => 'touch index.wsgi',
+		'branch' => 'master',
+	),
+	'golden-dcf' => array(
+		'projPath' => $PROJECTS_PATH.'dcf-test/',
+		'postHookCmd' => 'touch index.wsgi',
+		'branch' => 'master',
 	),
 );
 
