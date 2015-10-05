@@ -5,12 +5,12 @@ Based on [«Automated git deployment» script](http://jonathannicol.com/blog/201
 
 Some fragments of this manual was taken from Jonathan Nicoal's documentation page.
 
-Version 0.0.1
-Last changes 2015.09.06
+Version 0.0.2
+Last changes 2015.10.05
 
 Documentation is in progress.
 
-## Changes/features
+## Features
 
 - Fixed new bitbucket.org webhooks interface (stream instead of POST). See [discussion](https://bitbucket.org/alixandru/bitbucket-sync/issues/34/bitbucket-api-change-breaks-gatewayphp) on another synchronizator _bitbucket-sync_ by [alixandru](https://bitbucket.org/alixandru/).
 - Added support for multiple projects. See array `$PROJECTS` in **CONFIG.php**.
@@ -52,4 +52,10 @@ Whenever you do a git fetch Bitbucket will verify your identity automatically, w
 On the Bitbucket website navigate to your repository's _Administration > Webhooks_ screen and add a new webhook, pointed to `http://<domain>/<path>/bitbucket-hook.php`.
 
 For more detailed information see the [original Jonathan's page](http://jonathannicol.com/blog/2013/11/19/automated-git-deployments-from-bitbucket/), look config file and source code or simply ask me.
+
+## Changes
+
+### 2015.10.05, v.0.0.2
+
+- Added project parameter for post deploy execution: `$PROJECTS['repo-name']['posHookCmd']` (see _CONFIG.php_). For example, touch _index.wsgi_ for django configuration reloading: `... 'postHookCmd' => 'touch index.wsgi', ...`. Command running in project folder (specified by `projPath` parameter.
 

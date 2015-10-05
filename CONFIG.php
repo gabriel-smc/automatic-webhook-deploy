@@ -1,6 +1,6 @@
 <?php
 
-/*{{{ v.150906.001 (0.0.1)
+/*{{{ v.151005.001 (0.0.2)
 
 	Sample config file for bitbucket hooks.
 
