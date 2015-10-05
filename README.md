@@ -16,6 +16,7 @@ Documentation is in progress.
 - Added support for multiple projects. See array `$PROJECTS` in **CONFIG.php**.
 - Optional fetching or cloning repositiories demand on their presence.
 - Project and repository folders automaticly creating if they're not exists. (You need no to create empty folders before operations and can to reset and initiate full reload by simply removing entire repository/project folders.)
+- Post hook command execution.
 
 ## Requirements
 
