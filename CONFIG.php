@@ -43,15 +43,16 @@ $PROJECTS = array(
 	// 	// 'postHookCmd' => 'your_command', // command to execute after deploy, optional
 	// 	// 'branch' => 'master', // Deploing branch, optional
 	// ),
-	'golden-mysite' => array(
-		'projPath' => $PROJECTS_PATH.'mysite2/',
+	'golden-site' => array(
+		'projPath' => $PROJECTS_PATH.'site/',
 		'postHookCmd' => 'touch index.wsgi',
-		'branch' => 'master',
+	),
+	'gold-master' => array(
+		'projPath' => $PROJECTS_PATH.'old/',
 	),
 	'golden-dcf' => array(
 		'projPath' => $PROJECTS_PATH.'dcf-test/',
 		'postHookCmd' => 'touch index.wsgi',
-		'branch' => 'master',
 	),
 );
 
