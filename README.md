@@ -58,5 +58,5 @@ For more detailed information see the [original Jonathan's page](http://jonathan
 
 ### 2015.10.05, v.0.0.2
 
-- Added project parameter for post deploy execution: `$PROJECTS['repo-name']['posHookCmd']` (see _CONFIG.php_). For example, touch _index.wsgi_ for django configuration reloading: `... 'postHookCmd' => 'touch index.wsgi', ...`. Command running in project folder (specified by `projPath` parameter.
+- Added project parameter for post deploy execution: `$PROJECTS['repo-name']['postHookCmd']` (see _CONFIG.php_). For example, touch _index.wsgi_ for django configuration reloading: `... 'postHookCmd' => 'touch index.wsgi', ...`. Command running in project folder (specified by `projPath` parameter.
 
