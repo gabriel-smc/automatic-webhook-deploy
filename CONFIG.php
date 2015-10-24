@@ -43,9 +43,14 @@ $PROJECTS = array(
 	// 	// 'postHookCmd' => 'your_command', // command to execute after deploy, optional
 	// 	// 'branch' => 'master', // Deploing branch, optional
 	// ),
+	// 'golden-site' => array(
+	// 	'projPath' => $PROJECTS_PATH.'site/',
+	// 	'postHookCmd' => 'touch index.wsgi',
+	// ),
 	'golden-site' => array(
-		'projPath' => $PROJECTS_PATH.'site/',
+		'projPath' => $PROJECTS_PATH.'exgrunt/',
 		'postHookCmd' => 'touch index.wsgi',
+		'branch' => 'exgrunt',
 	),
 	'gold-master' => array(
 		'projPath' => $PROJECTS_PATH.'old/',

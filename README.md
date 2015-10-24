@@ -60,3 +60,6 @@ For more detailed information see the [original Jonathan's page](http://jonathan
 
 - Added project parameter for post deploy execution: `$PROJECTS['repo-name']['postHookCmd']` (see _CONFIG.php_). For example, touch _index.wsgi_ for django configuration reloading: `... 'postHookCmd' => 'touch index.wsgi', ...`. Command running in project folder (specified by `projPath` parameter.
 
+## TODO
+
+- Capability of processing several branches (one per project) for one repository. Need to change CONFIG:PROJECTS structure. E.g. use some `id` as key and store repository id in values.
