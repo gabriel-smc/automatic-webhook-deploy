@@ -107,10 +107,10 @@ function placeVerboseInfo ()/*{{{ Place verbose log information -- if specified 
 	$repoPath = $CONFIG['repositoriesPath'].$REPO.'.git/';
 
 	if ( $CONFIG['verbose'] ) {
-		_LOG_VAR('CONFIG: ',$CONFIG);
-		_LOG_VAR('REPO: ',$REPO);
-		_LOG_VAR('repoPath: ',$repoPath);
-		_LOG_VAR('$PROJECTS[$REPO]: ',$PROJECTS[$REPO]);
+		_LOG_VAR('CONFIG',$CONFIG);
+		_LOG_VAR('REPO',$REPO);
+		_LOG_VAR('repoPath',$repoPath);
+		_LOG_VAR('$PROJECTS[$REPO]',$PROJECTS[$REPO]);
 	}
 }/*}}}*/
 function fetchRepository ()/*{{{ Fetch or clone repository */

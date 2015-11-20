@@ -36,7 +36,7 @@ function _LOG ($s)/*{{{*/
 }/*}}}*/
 function _LOG_VAR ($s,$p)/*{{{*/
 {
-	_LOG($s.": ".print_r($p,true));
+	_LOG($s.': '.print_r($p,true));
 }/*}}}*/
 function _ERROR ($s)/*{{{*/
 {
