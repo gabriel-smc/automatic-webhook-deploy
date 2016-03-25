@@ -81,9 +81,8 @@ function fetchParams ()/*{{{ Get parameters from bitbucket payload now only (REP
 	}
 
 	foreach ( $PAYLOAD->push->changes as $change ) {
-		if (is_object($change->new) && $change->new->type == "branch" &&
-			isset($PROJECTS[$REPO][$change->new->name])
-		) {
+		if ( is_object($change->new) && $change->new->type == "branch" &&
+			isset($PROJECTS[$REPO][$change->new->name]) ) {
 			// Create branch name for checkout
 			array_push($BRANCHES, $change->new->name);
 			_LOG("Changes in branch '".$change->new->name."' was fetched");
@@ -179,6 +178,7 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
 		$hash = rtrim(shell_exec('cd '.$repoPath.' && '.$CONFIG['gitCommand']
 			.' rev-parse --short '.$branchName));
 
-		_LOG("Branch '$branchName' Done, commit #$hash");
+		_LOG("Branch '$branchName' in '".$PROJECTS[$REPO][$branchName]['deployPath'].
+			"' done, commit #$hash");
 	}
 }/*}}}*/
