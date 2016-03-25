@@ -49,6 +49,7 @@ function initPayload ()/*{{{ Get posted data */
 	global $PAYLOAD;
 
 	_LOG('*** '.$_SERVER['HTTP_X_EVENT_KEY'].' #'.$_SERVER['HTTP_X_HOOK_UUID'].' ('.$_SERVER['HTTP_USER_AGENT'].')');
+	_LOG('remote addr: '.$_SERVER['REMOTE_ADDR']);
 
 	if ( isset($_POST['payload']) ) { // old method
 		$PAYLOAD = $_POST['payload'];
