@@ -7,34 +7,37 @@
 	Based on 'Automated git deployment' script by Jonathan Nicoal:
 	http://jonathannicol.com/blog/2013/11/19/automated-git-deployments-from-bitbucket/
 
-	See README.md and CONFIG.php
+	See README.md and config.sample.php
 
 	---
 	Igor Lilliputten
 	mailto: igor at lilliputten dot ru
 	http://lilliputtem.ru/
 
+	Ivan Pushkin
+	mailto: iv dot pushk at gmail dot com
+
 }}}*/
 
 /*{{{ *** Global variables */
 
-define('DEFAULT_BRANCH', 'master');
 define('DEFAULT_FOLDER_MODE', 0755);
 
-$REPO = '';
-$PAYLOAD = array ();
+$PAYLOAD  = array ();
+$REPO     = '';
+$BRANCHES = array ();
 
 /*}}}*/
 
 function initLog ()/*{{{ Initalizing log variables */
 {
-	global $CONFIG;
+	global $CONFIG, $_LOG_ENABLED, $_LOG_FILE;
 
 	if ( !empty($CONFIG['log']) ) {
-		$GLOBALS['_LOG_ENABLED'] = true;
+		$_LOG_ENABLED = true;
 	}
 	if ( !empty($CONFIG['logFile']) ) {
-		$GLOBALS['_LOG_FILE'] = $CONFIG['logFile'];
+		$_LOG_FILE = $CONFIG['logFile'];
 	}
 	if ( !empty($CONFIG['logClear']) ) {
 		_LOG_CLEAR();
@@ -45,7 +48,7 @@ function initLog ()/*{{{ Initalizing log variables */
 }/*}}}*/
 function initPayload ()/*{{{ Get posted data */
 {
-	global $PAYLOAD, $CONFIG, $PROJECTS;
+	global $PAYLOAD;
 
 	if ( isset($_POST['payload']) ) { // old method
 		$PAYLOAD = $_POST['payload'];
@@ -58,10 +61,17 @@ function initPayload ()/*{{{ Get posted data */
 		exit;
 	}
 
+	if ( !isset($PAYLOAD->repository->name, $PAYLOAD->push->changes) ) {
+		_ERROR("Invalid payload data was received!");
+		exit;
+	}
+
+	_LOG("Valid payload was received");
+
 }/*}}}*/
 function fetchParams ()/*{{{ Get parameters from bitbucket payload now only (REPO) */
 {
-	global $REPO, $PAYLOAD, $CONFIG, $PROJECTS;
+	global $REPO, $PAYLOAD, $PROJECTS, $BRANCHES;
 
 	// Get repository name:
 	$REPO = $PAYLOAD->repository->name;
@@ -70,10 +80,19 @@ function fetchParams ()/*{{{ Get parameters from bitbucket payload now only (REP
 		exit;
 	}
 
+	foreach ($PAYLOAD->push->changes as $change) {
+		if (is_object($change->new) && $change->new->type == "branch" &&
+			isset($PROJECTS[$REPO][$change->new->name])
+		) {
+			array_push($BRANCHES, $change->new->name);
+			_LOG("Changes in branch '".$change->new->name."' was fetched");
+		}
+	}
+
 }/*}}}*/
 function checkPaths ()/*{{{ Check repository and project paths; create them if neccessary */
 {
-	global $REPO, $CONFIG, $PROJECTS;
+	global $REPO, $CONFIG, $PROJECTS, $BRANCHES;
 
 	// Check for repositories folder path; create if absent 
 	if ( !is_dir($CONFIG['repositoriesPath']) ) {
@@ -87,22 +106,26 @@ function checkPaths ()/*{{{ Check repository and project paths; create them if n
 		}
 	}
 
-	// Check for current project folder; create if absent 
-	if ( !is_dir($PROJECTS[$REPO]['projPath']) ) {
-		$mode = ( !empty($CONFIG['folderMode']) ) ? $CONFIG['folderMode'] : DEFAULT_FOLDER_MODE;
-		if ( mkdir($PROJECTS[$REPO]['projPath'],$mode,true) ) {
-			_LOG("Creating project folder '".$PROJECTS[$REPO]['projPath']." (".decoct($mode).") for '$REPO'");
-		}
-		else {
-			_ERROR("Error creating project folder '".$PROJECTS[$REPO]['projPath']." for '$REPO'! Exiting.");
-			exit;
+	// Create folder if absent for each pushed branch
+	foreach ($BRANCHES as $branchName) {
+		if ( !is_dir($PROJECTS[$REPO][$branchName]['deployPath']) ) {
+			$mode = ( !empty($CONFIG['folderMode']) ) ? $CONFIG['folderMode'] : DEFAULT_FOLDER_MODE;
+			if ( mkdir($PROJECTS[$REPO][$branchName]['deployPath'],$mode,true) ) {
+				_LOG("Creating project folder '".$PROJECTS[$REPO][$branchName]['deployPath'].
+					" (".decoct($mode).") for '$REPO' branch '$branchName'");
+			}
+			else {
+				_ERROR("Error creating project folder '".$PROJECTS[$REPO][$branchName]['deployPath'].
+					" for '$REPO' branch '$branchName'! Exiting.");
+				exit;
+			}
 		}
 	}
 
 }/*}}}*/
 function placeVerboseInfo ()/*{{{ Place verbose log information -- if specified in config */
 {
-	global $REPO, $CONFIG, $PROJECTS;
+	global $REPO, $CONFIG, $BRANCHES;
 
 	$repoPath = $CONFIG['repositoriesPath'].$REPO.'.git/';
 
@@ -110,7 +133,7 @@ function placeVerboseInfo ()/*{{{ Place verbose log information -- if specified 
 		_LOG_VAR('CONFIG',$CONFIG);
 		_LOG_VAR('REPO',$REPO);
 		_LOG_VAR('repoPath',$repoPath);
-		_LOG_VAR('$PROJECTS[$REPO]',$PROJECTS[$REPO]);
+		_LOG_VAR('BRANCHES',$BRANCHES);
 	}
 }/*}}}*/
 function fetchRepository ()/*{{{ Fetch or clone repository */
@@ -123,7 +146,8 @@ function fetchRepository ()/*{{{ Fetch or clone repository */
 	// If repository or repository folder are absent then clone full repository
 	if ( !is_dir($repoPath) || !is_file($repoPath.'HEAD') ) {
 		_LOG("Absent repository for '$REPO', cloning");
-		exec('cd '.$CONFIG['repositoriesPath'].' && '.$CONFIG['gitCommand'].' clone --mirror git@bitbucket.org:'.$CONFIG['bitbucketUsername'].'/'.$REPO.'.git');
+		exec('cd '.$CONFIG['repositoriesPath'].' && '.$CONFIG['gitCommand'].
+			' clone --mirror git@bitbucket.org:'.$CONFIG['bitbucketUsername'].'/'.$REPO.'.git');
 	}
 	// Else fetch changes
 	else {
@@ -134,22 +158,25 @@ function fetchRepository ()/*{{{ Fetch or clone repository */
 }/*}}}*/
 function checkoutProject ()/*{{{ Checkout project into target folder */
 {
-	global $REPO, $CONFIG, $PROJECTS;
+	global $REPO, $CONFIG, $PROJECTS, $BRANCHES;
 
 	// Compose current repository path
 	$repoPath = $CONFIG['repositoriesPath'].$REPO.'.git/';
 
 	// Checkout project files
-	$branch = ( !empty($PROJECTS[$REPO]['branch']) ) ? $PROJECTS[$REPO]['branch']: DEFAULT_BRANCH;
-	exec('cd '.$repoPath.' && GIT_WORK_TREE='.$PROJECTS[$REPO]['projPath'].' '.$CONFIG['gitCommand'].' checkout -f '.$branch);
+	foreach ($BRANCHES as $branchName) {
+		exec('cd '.$repoPath.' && GIT_WORK_TREE='.$PROJECTS[$REPO][$branchName]['deployPath']
+			.' '.$CONFIG['gitCommand'].' checkout -f '.$branchName);
 
-	if ( !empty($PROJECTS[$REPO]['postHookCmd']) ) {
-		exec('cd '.$PROJECTS[$REPO]['projPath'].' && '.$PROJECTS[$REPO]['postHookCmd']);
+		if (!empty($PROJECTS[$REPO][$branchName]['postHookCmd'])) {
+			exec('cd '.$PROJECTS[$REPO]['deployPath'].' && '.$PROJECTS[$REPO]['postHookCmd']);
+		}
+
+		// Log the deployment
+		$hash = rtrim(
+			shell_exec('cd '.$repoPath.' && '.$CONFIG['gitCommand']
+				.' rev-parse --short '.$branchName)
+		);
+		_LOG("Branch '$branchName' Done, commit #$hash");
 	}
-
-	// Log the deployment
-	$hash = rtrim( shell_exec('cd '.$repoPath.' && '.$CONFIG['gitCommand'].' rev-parse --short HEAD') );
-	_LOG("Done, commit #".$hash);
-
 }/*}}}*/
-

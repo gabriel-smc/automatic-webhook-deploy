@@ -5,15 +5,15 @@ Based on [«Automated git deployment» script](http://jonathannicol.com/blog/201
 
 Some fragments of this manual was taken from Jonathan Nicoal's documentation page.
 
-Version 0.0.2
-Last changes 2015.10.05
+Version 0.0.3
+Last changes 2016.03.25
 
 Documentation is in progress.
 
 ## Features
 
 - Fixed new bitbucket.org webhooks interface (stream instead of POST). See [discussion](https://bitbucket.org/alixandru/bitbucket-sync/issues/34/bitbucket-api-change-breaks-gatewayphp) on another synchronizator _bitbucket-sync_ by [alixandru](https://bitbucket.org/alixandru/).
-- Added support for multiple projects. See array `$PROJECTS` in **CONFIG.php**.
+- Added support for multiple projects. See array `$PROJECTS` in **config.sample.php**.
 - Optional fetching or cloning repositiories demand on their presence.
 - Project and repository folders automaticly creating if they're not exists. (You need no to create empty folders before operations and can to reset and initiate full reload by simply removing entire repository/project folders.)
 - Post hook command execution.
@@ -56,10 +56,9 @@ For more detailed information see the [original Jonathan's page](http://jonathan
 
 ## Changes
 
+### 2016.03.25, v.0.0.3
 ### 2015.10.05, v.0.0.2
 
-- Added project parameter for post deploy execution: `$PROJECTS['repo-name']['postHookCmd']` (see _CONFIG.php_). For example, touch _index.wsgi_ for django configuration reloading: `... 'postHookCmd' => 'touch index.wsgi', ...`. Command running in project folder (specified by `projPath` parameter.
+- Added project parameter for post deploy execution: `$PROJECTS['repo-name']['postHookCmd']` (see _config.sample.php_). For example, touch _index.wsgi_ for django configuration reloading: `... 'postHookCmd' => 'touch index.wsgi', ...`. Command running in project folder (specified by `deployPath` parameter.
 
 ## TODO
-
-- Capability of processing several branches (one per project) for one repository. Need to change CONFIG:PROJECTS structure. E.g. use some `id` as key and store repository id in values.
