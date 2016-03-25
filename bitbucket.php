@@ -80,7 +80,7 @@ function fetchParams ()/*{{{ Get parameters from bitbucket payload now only (REP
 		exit;
 	}
 
-	foreach ($PAYLOAD->push->changes as $change) {
+	foreach ( $PAYLOAD->push->changes as $change ) {
 		if (is_object($change->new) && $change->new->type == "branch" &&
 			isset($PROJECTS[$REPO][$change->new->name])
 		) {
@@ -88,6 +88,10 @@ function fetchParams ()/*{{{ Get parameters from bitbucket payload now only (REP
 			array_push($BRANCHES, $change->new->name);
 			_LOG("Changes in branch '".$change->new->name."' was fetched");
 		}
+	}
+
+	if ( empty($BRANCHES) ) {
+		_LOG("Nothing to update");
 	}
 
 }/*}}}*/
@@ -108,7 +112,7 @@ function checkPaths ()/*{{{ Check repository and project paths; create them if n
 	}
 
 	// Create folder if absent for each pushed branch
-	foreach ($BRANCHES as $branchName) {
+	foreach ( $BRANCHES as $branchName ) {
 		if ( !is_dir($PROJECTS[$REPO][$branchName]['deployPath']) ) {
 			$mode = ( !empty($CONFIG['folderMode']) ) ? $CONFIG['folderMode'] : DEFAULT_FOLDER_MODE;
 			if ( mkdir($PROJECTS[$REPO][$branchName]['deployPath'],$mode,true) ) {
@@ -163,7 +167,7 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
 	$repoPath = $CONFIG['repositoriesPath'].'/'.$REPO.'.git/';
 
 	// Checkout project files
-	foreach ($BRANCHES as $branchName) {
+	foreach ( $BRANCHES as $branchName ) {
 		exec('cd '.$repoPath.' && GIT_WORK_TREE='.$PROJECTS[$REPO][$branchName]['deployPath']
 			.' '.$CONFIG['gitCommand'].' checkout -f '.$branchName);
 
