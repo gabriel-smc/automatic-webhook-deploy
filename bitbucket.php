@@ -127,7 +127,7 @@ function placeVerboseInfo ()/*{{{ Place verbose log information -- if specified 
 {
 	global $REPO, $CONFIG, $BRANCHES;
 
-	$repoPath = $CONFIG['repositoriesPath'].$REPO.'.git/';
+	$repoPath = $CONFIG['repositoriesPath'].'/'.$REPO.'.git/';
 
 	if ( $CONFIG['verbose'] ) {
 		_LOG_VAR('CONFIG',$CONFIG);
@@ -138,10 +138,10 @@ function placeVerboseInfo ()/*{{{ Place verbose log information -- if specified 
 }/*}}}*/
 function fetchRepository ()/*{{{ Fetch or clone repository */
 {
-	global $REPO, $CONFIG, $PROJECTS;
+	global $REPO, $CONFIG;
 
 	// Compose current repository path
-	$repoPath = $CONFIG['repositoriesPath'].$REPO.'.git/';
+	$repoPath = $CONFIG['repositoriesPath'].'/'.$REPO.'.git/';
 
 	// If repository or repository folder are absent then clone full repository
 	if ( !is_dir($repoPath) || !is_file($repoPath.'HEAD') ) {
@@ -161,7 +161,7 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
 	global $REPO, $CONFIG, $PROJECTS, $BRANCHES;
 
 	// Compose current repository path
-	$repoPath = $CONFIG['repositoriesPath'].$REPO.'.git/';
+	$repoPath = $CONFIG['repositoriesPath'].'/'.$REPO.'.git/';
 
 	// Checkout project files
 	foreach ($BRANCHES as $branchName) {
