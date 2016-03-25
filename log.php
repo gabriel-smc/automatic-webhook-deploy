@@ -23,10 +23,14 @@ $_LOG_ENABLED = false;     // set to 'true' for enabling logging
 
 function _LOG_CLEAR ()/*{{{*/
 {
+	global $_LOG_FILE;
+
 	if ( !empty($GLOBALS['_LOG_ENABLED']) ) {
 		// file_put_contents($GLOBALS['_LOG_FILE'], "", LOCK_EX);
 		// flush();
-		unlink($GLOBALS['_LOG_FILE']);
+		if ( is_file($_LOG_FILE) ) {
+			unlink($_LOG_FILE);
+		}
 	}
 }/*}}}*/
 function _LOG ($s)/*{{{*/
