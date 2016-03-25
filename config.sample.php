@@ -21,9 +21,8 @@
 
 /*{{{ Auxiliary variables, used only for constructing $CONFIG and $PROJECTS  */
 
-$HOME_PATH         = '/home/g/goldenjeru/golden/';
-$REPOSITORIES_PATH = $HOME_PATH.'.repositories/';
-$PROJECTS_PATH     = $HOME_PATH;
+$REPOSITORIES_PATH = '/path/to/repositories';
+$PROJECTS_PATH     = '/path/to/projects';
 
 /*}}}*/
 
@@ -45,15 +44,15 @@ $CONFIG = array(
 $PROJECTS = array(
 	'repo-name-1' => array( // The key is a bitbucket.org repository name
 		'branch' => array(
-			'deployPath'  => $PROJECTS_PATH.'deploy_path/', // Path to deploy project, *REQUIRED*
-			'postHookCmd' => 'your_command',               // command to execute after deploy, optional
+			'deployPath'  => $PROJECTS_PATH.'/deploy_path', // Path to deploy project, *REQUIRED*
+			'postHookCmd' => 'your_command',                // command to execute after deploy, optional
 		),
 	),
 
 	'repo-name-N' => array( // The key is a bitbucket.org repository name
 		'branch' => array(
-			'deployPath'  => $PROJECTS_PATH.'deploy_path/', // Path to deploy project, *REQUIRED*
-			'postHookCmd' => 'your_command',               // command to execute after deploy, optional
+			'deployPath'  => $PROJECTS_PATH.'/deploy_path', // Path to deploy project, *REQUIRED*
+			'postHookCmd' => 'your_command',                // command to execute after deploy, optional
 		),
 	),
 );

@@ -16,7 +16,7 @@
 
 /*{{{ Global variables */
 
-$_LOG_FILE    = 'log.txt'; // log file name
+$_LOG_FILE    = 'log.txt'; // default log file name
 $_LOG_ENABLED = false;     // set to 'true' for enabling logging
 
 /*}}}*/

@@ -43,12 +43,12 @@ function initLog ()/*{{{ Initalizing log variables */
 		_LOG_CLEAR();
 	}
 
-	_LOG('*** '.$_SERVER['HTTP_X_EVENT_KEY'].' #'.$_SERVER['HTTP_X_HOOK_UUID'].' ('.$_SERVER['HTTP_USER_AGENT'].')');
-
 }/*}}}*/
 function initPayload ()/*{{{ Get posted data */
 {
 	global $PAYLOAD;
+
+	_LOG('*** '.$_SERVER['HTTP_X_EVENT_KEY'].' #'.$_SERVER['HTTP_X_HOOK_UUID'].' ('.$_SERVER['HTTP_USER_AGENT'].')');
 
 	if ( isset($_POST['payload']) ) { // old method
 		$PAYLOAD = $_POST['payload'];
@@ -84,6 +84,7 @@ function fetchParams ()/*{{{ Get parameters from bitbucket payload now only (REP
 		if (is_object($change->new) && $change->new->type == "branch" &&
 			isset($PROJECTS[$REPO][$change->new->name])
 		) {
+			// Create branch name for checkout
 			array_push($BRANCHES, $change->new->name);
 			_LOG("Changes in branch '".$change->new->name."' was fetched");
 		}
@@ -127,12 +128,10 @@ function placeVerboseInfo ()/*{{{ Place verbose log information -- if specified 
 {
 	global $REPO, $CONFIG, $BRANCHES;
 
-	$repoPath = $CONFIG['repositoriesPath'].'/'.$REPO.'.git/';
-
 	if ( $CONFIG['verbose'] ) {
 		_LOG_VAR('CONFIG',$CONFIG);
 		_LOG_VAR('REPO',$REPO);
-		_LOG_VAR('repoPath',$repoPath);
+		_LOG_VAR('repoPath',$CONFIG['repositoriesPath'].'/'.$REPO.'.git/');
 		_LOG_VAR('BRANCHES',$BRANCHES);
 	}
 }/*}}}*/
@@ -173,10 +172,9 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
 		}
 
 		// Log the deployment
-		$hash = rtrim(
-			shell_exec('cd '.$repoPath.' && '.$CONFIG['gitCommand']
-				.' rev-parse --short '.$branchName)
-		);
+		$hash = rtrim(shell_exec('cd '.$repoPath.' && '.$CONFIG['gitCommand']
+			.' rev-parse --short '.$branchName));
+
 		_LOG("Branch '$branchName' Done, commit #$hash");
 	}
 }/*}}}*/
