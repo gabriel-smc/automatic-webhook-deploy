@@ -186,7 +186,7 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
 		}
 
 		if ( !empty($PROJECTS[$REPO][$branchName]['postHookCmd']) ) {
-			system('cd '.$PROJECTS[$REPO]['deployPath'].' && '.$PROJECTS[$REPO]['postHookCmd'],
+			system('cd '.$PROJECTS[$REPO][$branchName]['deployPath'].' && '.$PROJECTS[$REPO][$branchName]['postHookCmd'],
 				$status);
 			if ( $status !== 0 ) {
 				_ERROR("Error in post hook command for branch '$branchName' in repo '$REPO'!");
