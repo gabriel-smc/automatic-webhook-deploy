@@ -198,7 +198,16 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
 		$hash = rtrim(shell_exec('cd '.$repoPath.' && '.$CONFIG['gitCommand']
 			.' rev-parse --short '.$branchName));
 
-		_LOG("Branch '$branchName' was deployed in '".$PROJECTS[$REPO][$branchName]['deployPath'].
-			"', commit #$hash");
+		$logLine = "Branch '$branchName' was deployed in '".$PROJECTS[$REPO][$branchName]['deployPath'].
+			"', commit #$hash";
+
+		_LOG($logLine);
+
+		if ( !empty($PROJECTS[$REPO][$branchName]['mailTo']) ) {
+			$mailto = $PROJECTS[$REPO][$branchName]['mailTo'];
+			$headers = 'From: '. $CONFIG['mailFrom']. "\r\n";
+			mail($mailto, $subject, $logLine, $headers);
+			_LOG("Sent e-mail to ".$mailto);
+		}
 	}
 }/*}}}*/
