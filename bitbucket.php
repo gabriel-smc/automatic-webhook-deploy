@@ -29,27 +29,46 @@ $BRANCHES = array ();
 
 /*}}}*/
 
-function initLog ()/*{{{ Initalizing log variables */
+function initConfig ()/*{{{ Initializing repo configs */
 {
-	global $CONFIG, $_LOG_ENABLED, $_LOG_FILE;
+    global $PROJECTS;
 
-	if ( !empty($CONFIG['log']) ) {
-		$_LOG_ENABLED = true;
-	}
-	if ( !empty($CONFIG['logFile']) ) {
-		$_LOG_FILE = $CONFIG['logFile'];
-	}
-	if ( !empty($CONFIG['logClear']) ) {
-		_LOG_CLEAR();
-	}
+    $tmpProjects = array();
+
+    // Bitbucket uses lower case repo names!
+    foreach ($PROJECTS as $repoName => $config) {
+        $tmpProjects[strtolower($repoName)] = $config;
+    }
+
+    $PROJECTS = $tmpProjects;
+}/*}}}*/
+function initLog ()/*{{{ Initializing log variables */
+{
+    global $CONFIG, $_LOG_ENABLED, $_LOG_FILE;
+
+    if ( !empty($CONFIG['log']) ) {
+        $_LOG_ENABLED = true;
+    }
+    if ( !empty($CONFIG['logFile']) ) {
+        $_LOG_FILE = $CONFIG['logFile'];
+    }
+    if ( !empty($CONFIG['logClear']) ) {
+        _LOG_CLEAR();
+    }
 
 }/*}}}*/
 function initPayload ()/*{{{ Get posted data */
 {
 	global $PAYLOAD;
 
-	_LOG('*** '.$_SERVER['HTTP_X_EVENT_KEY'].' #'.$_SERVER['HTTP_X_HOOK_UUID'].' ('.$_SERVER['HTTP_USER_AGENT'].')');
-	_LOG('remote addr: '.$_SERVER['REMOTE_ADDR']);
+    if (isset($_SERVER['HTTP_X_EVENT_KEY'], $_SERVER['HTTP_X_HOOK_UUID'], $_SERVER['HTTP_USER_AGENT'],
+        $_SERVER['REMOTE_ADDR'])) {
+        _LOG('*** ' . $_SERVER['HTTP_X_EVENT_KEY'] . ' #' . $_SERVER['HTTP_X_HOOK_UUID'] .
+            ' (' . $_SERVER['HTTP_USER_AGENT'] . ')');
+        _LOG('remote addr: ' . $_SERVER['REMOTE_ADDR']);
+    } else {
+        _LOG('*** [unknown event key]#[unknown hook uuid] ***');
+    }
 
 	if ( isset($_POST['payload']) ) { // old method
 		$PAYLOAD = $_POST['payload'];
@@ -75,7 +94,7 @@ function fetchParams ()/*{{{ Get parameters from bitbucket payload now only (REP
 	global $REPO, $PAYLOAD, $PROJECTS, $BRANCHES;
 
 	// Get repository name:
-	$REPO = $PAYLOAD->repository->name;
+	$REPO = $PAYLOAD->repository->full_name;
 	if ( empty($PROJECTS[$REPO]) ) {
 		_ERROR("Not found repository config for '$REPO'!");
 		exit;
@@ -150,11 +169,10 @@ function fetchRepository ()/*{{{ Fetch or clone repository */
 	if ( !is_dir($repoPath) || !is_file($repoPath.'HEAD') ) {
 		_LOG("Absent repository for '$REPO', cloning");
 		system('cd '.$CONFIG['repositoriesPath'].' && '.$CONFIG['gitCommand'].
-			' clone --mirror git@bitbucket.org:'.$CONFIG['bitbucketUsername'].'/'.$REPO.'.git',
+			' clone --mirror git@bitbucket.org:'.$REPO.'.git',
 			$status);
 		if ( $status !== 0 ) {
-			_ERROR('Cannot clone repository git@bitbucket.org:'.
-				$CONFIG['bitbucketUsername'].'/'.$REPO.'.git');
+			_ERROR('Cannot clone repository git@bitbucket.org:'.$REPO.'.git');
 			exit;
 		}
 	}

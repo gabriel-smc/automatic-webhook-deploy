@@ -19,43 +19,34 @@
 
 }}}*/
 
-/*{{{ Auxiliary variables, used only for constructing $CONFIG and $PROJECTS  */
-
-$REPOSITORIES_PATH = '/path/to/repositories';
-$PROJECTS_PATH     = '/path/to/projects';
-
-/*}}}*/
-
 // Base tool configuration:
 $CONFIG = array(
-	'bitbucketUsername' => 'lilliputten', // The username or team name where the
-	// repository is located on bitbucket.org, *REQUIRED*
+	'gitCommand'       => 'git',                   // Git command, *REQUIRED*
+	'repositoriesPath' => '/path/to/repositories', // Folder containing all repositories, *REQUIRED*
+	'log'              => true,                    // Enable logging, optional
+	'logFile'          => 'bitbucket.log',         // Logging file name, optional
+	'logClear'         => true,                    // clear log each time, optional
+	'verbose'          => true,                    // show debug info in log, optional
+	'folderMode'       => 0700,                    // creating folder mode, optional
 
-	'gitCommand'       => 'git',              // Git command, *REQUIRED*
-	'repositoriesPath' => $REPOSITORIES_PATH, // Folder containing all repositories, *REQUIRED*
-	'log'              => true,               // Enable logging, optional
-	'logFile'          => 'bitbucket.log',    // Logging file name, optional
-	'logClear'         => true,               // clear log each time, optional
-	'verbose'          => true,               // show debug info in log, optional
-	'folderMode'       => 0700,               // creating folder mode, optional
-	'mailFrom'	       => 'Automatic Bitbucket Deploy <git@bitbucket.com>',// The sender e-mail address for info emails
+	'mailFrom'	       => 'Automatic Bitbucket Deploy <git@bitbucket.com>', // The sender e-mail address for info emails
 );
 
-// List of deploying projects:
+// List of deployed projects:
 $PROJECTS = array(
-	'repo-name-1' => array( // The key is a bitbucket.org repository name
+	'bitbucketUsername/repoName-1' => array( // The key is a bitbucket.org repository full name *REQUIRED*
 		'branch' => array(
-			'deployPath'  => $PROJECTS_PATH.'/deploy_path', // Path to deploy project, *REQUIRED*
-			'postHookCmd' => 'your_command',                // command to execute after deploy, optional
-			'mailTo'      => 'your@mail.address'            // log email recipient, optional
+			'deployPath'  => '/deploy_path',     // Path to deploy project, *REQUIRED*
+			'postHookCmd' => 'your_command',     // command to execute after deploy, optional
+			'mailTo'      => 'your@mail.address' // log email recipient, optional
 		),
 	),
 
-	'repo-name-N' => array( // The key is a bitbucket.org repository name
+	'bitbucketUsername/repoName-N' => array( // The key is a bitbucket.org repository full name *REQUIRED*
 		'branch' => array(
-			'deployPath'  => $PROJECTS_PATH.'/deploy_path', // Path to deploy project, *REQUIRED*
-			'postHookCmd' => 'your_command',                // command to execute after deploy, optional
-			'mailTo'      => 'your@mail.address'            // log email recipient, optional
+			'deployPath'  => '/deploy_path',     // Path to deploy project, *REQUIRED*
+			'postHookCmd' => 'your_command',     // command to execute after deploy, optional
+			'mailTo'      => 'your@mail.address' // log email recipient, optional
 		),
 	),
 );
