@@ -2,20 +2,20 @@
 
 /*{{{ v.150906.001 (0.0.1)
 
-	Bitbucket webhook interface.
+    Bitbucket webhook interface.
 
-	Based on 'Automated git deployment' script by Jonathan Nicoal:
-	http://jonathannicol.com/blog/2013/11/19/automated-git-deployments-from-bitbucket/
+    Based on 'Automated git deployment' script by Jonathan Nicoal:
+    http://jonathannicol.com/blog/2013/11/19/automated-git-deployments-from-bitbucket/
 
-	See README.md and config.sample.php
+    See README.md and config.sample.php
 
-	---
-	Igor Lilliputten
-	mailto: igor at lilliputten dot ru
-	http://lilliputtem.ru/
+    ---
+    Igor Lilliputten
+    mailto: igor at lilliputten dot ru
+    http://lilliputtem.ru/
 
-	Ivan Pushkin
-	mailto: iv dot pushk at gmail dot com
+    Ivan Pushkin
+    mailto: iv dot pushk at gmail dot com
 
 }}}*/
 
