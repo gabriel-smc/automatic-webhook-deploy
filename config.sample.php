@@ -28,8 +28,6 @@ $CONFIG = array(
 	'logClear'         => true,                    // clear log each time, optional
 	'verbose'          => true,                    // show debug info in log, optional
 	'folderMode'       => 0700,                    // creating folder mode, optional
-
-	'mailFrom'	       => 'Automatic Bitbucket Deploy <git@bitbucket.com>', // The sender e-mail address for info emails
 );
 
 // List of deployed projects:
@@ -38,7 +36,6 @@ $PROJECTS = array(
 		'branch' => array(
 			'deployPath'  => '/deploy_path',     // Path to deploy project, *REQUIRED*
 			'postHookCmd' => 'your_command',     // command to execute after deploy, optional
-			'mailTo'      => 'your@mail.address' // log email recipient, optional
 		),
 	),
 
@@ -46,7 +43,6 @@ $PROJECTS = array(
 		'branch' => array(
 			'deployPath'  => '/deploy_path',     // Path to deploy project, *REQUIRED*
 			'postHookCmd' => 'your_command',     // command to execute after deploy, optional
-			'mailTo'      => 'your@mail.address' // log email recipient, optional
 		),
 	),
 );

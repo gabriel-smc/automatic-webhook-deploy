@@ -220,12 +220,5 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
 			"', commit #$hash";
 
 		_LOG($logLine);
-
-		if ( !empty($PROJECTS[$REPO][$branchName]['mailTo']) && !empty($CONFIG['mailFrom']) ) {
-			$mailto = $PROJECTS[$REPO][$branchName]['mailTo'];
-			$headers = 'From: '. $CONFIG['mailFrom']. "\r\n";
-			mail($mailto, $subject, $logLine, $headers);
-			_LOG("Sent e-mail to ".$mailto);
-		}
 	}
 }/*}}}*/
