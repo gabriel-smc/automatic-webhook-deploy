@@ -95,12 +95,12 @@ function fetchParams ()/*{{{ Get parameters from bitbucket payload now only (REP
     global $REPO, $REPO_NAME, $PAYLOAD, $PROJECTS, $BRANCHES;
 
     // Get repository name:
-    $REPO = $PAYLOAD->repository->full_name;
+    $REPO = strtolower($PAYLOAD->repository->full_name);
     if ( empty($PROJECTS[$REPO]) ) {
         _ERROR("Not found repository config for '$REPO'!");
         exit;
     }
-    $REPO_NAME = $PAYLOAD->repository->name;
+    $REPO_NAME = strtolower($PAYLOAD->repository->name);
 
     foreach ( $PAYLOAD->push->changes as $change ) {
         if ( is_object($change->new) && $change->new->type == "branch" &&
