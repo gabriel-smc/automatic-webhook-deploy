@@ -191,10 +191,10 @@ function fetchRepository ()/*{{{ Fetch or clone repository */
 }/*}}}*/
 function checkoutProject ()/*{{{ Checkout project into target folder */
 {
-    global $REPO, $CONFIG, $PROJECTS, $BRANCHES;
+    global $REPO, $REPO_NAME, $CONFIG, $PROJECTS, $BRANCHES;
 
     // Compose current repository path
-    $repoPath = $CONFIG['repositoriesPath'].'/'.$REPO.'.git/';
+    $repoPath = $CONFIG['repositoriesPath'].'/'.$REPO_NAME.'.git/';
 
     // Checkout project files
     foreach ( $BRANCHES as $branchName ) {
