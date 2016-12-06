@@ -23,9 +23,10 @@
 
 define('DEFAULT_FOLDER_MODE', 0755);
 
-$PAYLOAD  = array ();
-$REPO     = '';
-$BRANCHES = array ();
+$PAYLOAD   = array ();
+$BRANCHES  = array ();
+$REPO      = ''; // full name
+$REPO_NAME = ''; // name
 
 /*}}}*/
 
@@ -91,7 +92,7 @@ function initPayload ()/*{{{ Get posted data */
 }/*}}}*/
 function fetchParams ()/*{{{ Get parameters from bitbucket payload now only (REPO) */
 {
-    global $REPO, $PAYLOAD, $PROJECTS, $BRANCHES;
+    global $REPO, $REPO_NAME, $PAYLOAD, $PROJECTS, $BRANCHES;
 
     // Get repository name:
     $REPO = $PAYLOAD->repository->full_name;
@@ -99,6 +100,7 @@ function fetchParams ()/*{{{ Get parameters from bitbucket payload now only (REP
         _ERROR("Not found repository config for '$REPO'!");
         exit;
     }
+    $REPO_NAME = $PAYLOAD->repository->name;
 
     foreach ( $PAYLOAD->push->changes as $change ) {
         if ( is_object($change->new) && $change->new->type == "branch" &&
@@ -149,21 +151,21 @@ function checkPaths ()/*{{{ Check repository and project paths; create them if n
 }/*}}}*/
 function placeVerboseInfo ()/*{{{ Place verbose log information -- if specified in config */
 {
-    global $REPO, $CONFIG, $BRANCHES;
+    global $REPO, $REPO_NAME, $CONFIG, $BRANCHES;
 
     if ( $CONFIG['verbose'] ) {
         _LOG_VAR('CONFIG',$CONFIG);
         _LOG_VAR('REPO',$REPO);
-        _LOG_VAR('repoPath',$CONFIG['repositoriesPath'].'/'.$REPO.'.git/');
+        _LOG_VAR('repoPath',$CONFIG['repositoriesPath'].'/'.$REPO_NAME.'.git/');
         _LOG_VAR('BRANCHES',$BRANCHES);
     }
 }/*}}}*/
 function fetchRepository ()/*{{{ Fetch or clone repository */
 {
-    global $REPO, $CONFIG;
+    global $REPO, $REPO_NAME, $CONFIG;
 
     // Compose current repository path
-    $repoPath = $CONFIG['repositoriesPath'].'/'.$REPO.'.git/';
+    $repoPath = $CONFIG['repositoriesPath'].'/'.$REPO_NAME.'.git/';
 
     // If repository or repository folder are absent then clone full repository
     if ( !is_dir($repoPath) || !is_file($repoPath.'HEAD') ) {
