@@ -176,7 +176,7 @@ function fetchRepository ()/*{{{ Fetch or clone repository */
 
         $cmd = 'cd '.$CONFIG['repositoriesPath'].' && '.$CONFIG['gitCommand'].
             ' clone --mirror git@bitbucket.org:'.$REPO.'.git';
-        _LOG('CMD',$cmd);
+        _LOG_VAR('cmd',$cmd);
         system($cmd, $status);
 
         if ( $status !== 0 ) {
@@ -189,7 +189,7 @@ function fetchRepository ()/*{{{ Fetch or clone repository */
         _LOG("Fetching repository '$REPO'");
 
         $cmd = 'cd '.$repoPath.' && '.$CONFIG['gitCommand'].' fetch';
-        _LOG('CMD',$cmd);
+        _LOG_VAR('cmd',$cmd);
         system($cmd, $status);
 
         if ( $status !== 0 ) {
@@ -210,7 +210,7 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
     foreach ( $BRANCHES as $branchName ) {
         $cmd = 'cd '.$repoPath.' && GIT_WORK_TREE='.$PROJECTS[$REPO][$branchName]['deployPath']
             .' '.$CONFIG['gitCommand'].' checkout -f '.$branchName;
-        _LOG('CMD',$cmd);
+        _LOG_VAR('cmd',$cmd);
         system($cmd, $status);
 
         if ( $status !== 0 ) {
@@ -220,7 +220,7 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
 
         if ( !empty($PROJECTS[$REPO][$branchName]['postHookCmd']) ) {
             $cmd = 'cd '.$PROJECTS[$REPO][$branchName]['deployPath'].' && '.$PROJECTS[$REPO][$branchName]['postHookCmd'];
-            _LOG('CMD',$cmd);
+            _LOG_VAR('cmd',$cmd);
             system($cmd, $status);
 
             if ( $status !== 0 ) {
@@ -231,7 +231,7 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
 
         // Log the deployment
         $cmd = 'cd '.$repoPath.' && '.$CONFIG['gitCommand'].' rev-parse --short '.$branchName;
-        _LOG('CMD',$cmd);
+        _LOG_VAR('cmd',$cmd);
         $hash = rtrim(shell_exec($cmd));
 
         $logLine = "Branch '$branchName' was deployed in '".$PROJECTS[$REPO][$branchName]['deployPath'].
