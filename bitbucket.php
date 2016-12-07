@@ -37,7 +37,7 @@ function initConfig ()/*{{{ Initializing repo configs */
     $tmpProjects = array();
 
     // Bitbucket uses lower case repo names!
-    foreach ($PROJECTS as $repoName => $config) {
+    foreach ( $PROJECTS as $repoName => $config ) {
         $tmpProjects[strtolower($repoName)] = $config;
     }
 
@@ -68,7 +68,7 @@ function initPayload ()/*{{{ Get posted data */
             ' (' . $_SERVER['HTTP_USER_AGENT'] . ')');
         _LOG('remote addr: ' . $_SERVER['REMOTE_ADDR']);
     } else {
-        _LOG('*** [unknown event key]#[unknown hook uuid] ***');
+        _LOG('*** [unknown http event key] #[unknown http hook uuid] (unknown http user agent)');
     }
 
     if ( isset($_POST['payload']) ) { // old method
@@ -100,6 +100,7 @@ function fetchParams ()/*{{{ Get parameters from bitbucket payload now only (REP
         _ERROR("Not found repository config for '$REPO'!");
         exit;
     }
+
     $REPO_NAME = strtolower($PAYLOAD->repository->name);
 
     foreach ( $PAYLOAD->push->changes as $change ) {
@@ -123,6 +124,7 @@ function checkPaths ()/*{{{ Check repository and project paths; create them if n
     // Check for repositories folder path; create if absent
     if ( !is_dir($CONFIG['repositoriesPath']) ) {
         $mode = ( !empty($CONFIG['folderMode']) ) ? $CONFIG['folderMode'] : DEFAULT_FOLDER_MODE;
+
         if ( mkdir($CONFIG['repositoriesPath'],$mode,true) ) {
             _LOG("Creating repository folder '".$CONFIG['repositoriesPath']." (".decoct($mode).") for '$REPO'");
         }
@@ -136,6 +138,7 @@ function checkPaths ()/*{{{ Check repository and project paths; create them if n
     foreach ( $BRANCHES as $branchName ) {
         if ( !is_dir($PROJECTS[$REPO][$branchName]['deployPath']) ) {
             $mode = ( !empty($CONFIG['folderMode']) ) ? $CONFIG['folderMode'] : DEFAULT_FOLDER_MODE;
+
             if ( mkdir($PROJECTS[$REPO][$branchName]['deployPath'],$mode,true) ) {
                 _LOG("Creating project folder '".$PROJECTS[$REPO][$branchName]['deployPath'].
                     " (".decoct($mode).") for '$REPO' branch '$branchName'");
@@ -156,7 +159,7 @@ function placeVerboseInfo ()/*{{{ Place verbose log information -- if specified 
     if ( $CONFIG['verbose'] ) {
         _LOG_VAR('CONFIG',$CONFIG);
         _LOG_VAR('REPO',$REPO);
-        _LOG_VAR('repoPath',$CONFIG['repositoriesPath'].'/'.$REPO_NAME.'.git/');
+        _LOG_VAR('repoPath',$CONFIG['repositoriesPath'].DIRECTORY_SEPARATOR.$REPO_NAME.'.git');
         _LOG_VAR('BRANCHES',$BRANCHES);
     }
 }/*}}}*/
@@ -165,14 +168,16 @@ function fetchRepository ()/*{{{ Fetch or clone repository */
     global $REPO, $REPO_NAME, $CONFIG;
 
     // Compose current repository path
-    $repoPath = $CONFIG['repositoriesPath'].'/'.$REPO_NAME.'.git/';
+    $repoPath = $CONFIG['repositoriesPath'].DIRECTORY_SEPARATOR.$REPO_NAME.'.git';
 
     // If repository or repository folder are absent then clone full repository
-    if ( !is_dir($repoPath) || !is_file($repoPath.'HEAD') ) {
+    if ( !is_dir($repoPath) || !is_file($repoPath.DIRECTORY_SEPARATOR.'HEAD') ) {
         _LOG("Absent repository for '$REPO', cloning");
+
         system('cd '.$CONFIG['repositoriesPath'].' && '.$CONFIG['gitCommand'].
             ' clone --mirror git@bitbucket.org:'.$REPO.'.git',
             $status);
+
         if ( $status !== 0 ) {
             _ERROR('Cannot clone repository git@bitbucket.org:'.$REPO.'.git');
             exit;
@@ -181,7 +186,9 @@ function fetchRepository ()/*{{{ Fetch or clone repository */
     // Else fetch changes
     else {
         _LOG("Fetching repository '$REPO'");
+
         system('cd '.$repoPath.' && '.$CONFIG['gitCommand'].' fetch', $status);
+
         if ( $status !== 0 ) {
             _ERROR("Cannot fetch repository '$REPO' in '$repoPath'!");
             exit;
@@ -194,12 +201,13 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
     global $REPO, $REPO_NAME, $CONFIG, $PROJECTS, $BRANCHES;
 
     // Compose current repository path
-    $repoPath = $CONFIG['repositoriesPath'].'/'.$REPO_NAME.'.git/';
+    $repoPath = $CONFIG['repositoriesPath'].DIRECTORY_SEPARATOR.$REPO_NAME.'.git';
 
     // Checkout project files
     foreach ( $BRANCHES as $branchName ) {
         system('cd '.$repoPath.' && GIT_WORK_TREE='.$PROJECTS[$REPO][$branchName]['deployPath']
             .' '.$CONFIG['gitCommand'].' checkout -f '.$branchName, $status);
+
         if ( $status !== 0 ) {
             _ERROR("Cannot checkout branch '$branchName' in repo '$REPO'!");
             exit;
