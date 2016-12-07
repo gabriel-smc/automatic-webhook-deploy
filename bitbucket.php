@@ -174,9 +174,10 @@ function fetchRepository ()/*{{{ Fetch or clone repository */
     if ( !is_dir($repoPath) || !is_file($repoPath.DIRECTORY_SEPARATOR.'HEAD') ) {
         _LOG("Absent repository for '$REPO', cloning");
 
-        system('cd '.$CONFIG['repositoriesPath'].' && '.$CONFIG['gitCommand'].
-            ' clone --mirror git@bitbucket.org:'.$REPO.'.git',
-            $status);
+        $cmd = 'cd '.$CONFIG['repositoriesPath'].' && '.$CONFIG['gitCommand'].
+            ' clone --mirror git@bitbucket.org:'.$REPO.'.git';
+        _LOG('CMD',$cmd);
+        system($cmd, $status);
 
         if ( $status !== 0 ) {
             _ERROR('Cannot clone repository git@bitbucket.org:'.$REPO.'.git');
@@ -187,7 +188,9 @@ function fetchRepository ()/*{{{ Fetch or clone repository */
     else {
         _LOG("Fetching repository '$REPO'");
 
-        system('cd '.$repoPath.' && '.$CONFIG['gitCommand'].' fetch', $status);
+        $cmd = 'cd '.$repoPath.' && '.$CONFIG['gitCommand'].' fetch';
+        _LOG('CMD',$cmd);
+        system($cmd, $status);
 
         if ( $status !== 0 ) {
             _ERROR("Cannot fetch repository '$REPO' in '$repoPath'!");
@@ -205,8 +208,10 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
 
     // Checkout project files
     foreach ( $BRANCHES as $branchName ) {
-        system('cd '.$repoPath.' && GIT_WORK_TREE='.$PROJECTS[$REPO][$branchName]['deployPath']
-            .' '.$CONFIG['gitCommand'].' checkout -f '.$branchName, $status);
+        $cmd = 'cd '.$repoPath.' && GIT_WORK_TREE='.$PROJECTS[$REPO][$branchName]['deployPath']
+            .' '.$CONFIG['gitCommand'].' checkout -f '.$branchName;
+        _LOG('CMD',$cmd);
+        system($cmd, $status);
 
         if ( $status !== 0 ) {
             _ERROR("Cannot checkout branch '$branchName' in repo '$REPO'!");
@@ -214,8 +219,10 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
         }
 
         if ( !empty($PROJECTS[$REPO][$branchName]['postHookCmd']) ) {
-            system('cd '.$PROJECTS[$REPO][$branchName]['deployPath'].' && '.$PROJECTS[$REPO][$branchName]['postHookCmd'],
-                $status);
+            $cmd = 'cd '.$PROJECTS[$REPO][$branchName]['deployPath'].' && '.$PROJECTS[$REPO][$branchName]['postHookCmd'];
+            _LOG('CMD',$cmd);
+            system($cmd, $status);
+
             if ( $status !== 0 ) {
                 _ERROR("Error in post hook command for branch '$branchName' in repo '$REPO'!");
                 exit;
@@ -223,8 +230,9 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
         }
 
         // Log the deployment
-        $hash = rtrim(shell_exec('cd '.$repoPath.' && '.$CONFIG['gitCommand']
-            .' rev-parse --short '.$branchName));
+        $cmd = 'cd '.$repoPath.' && '.$CONFIG['gitCommand'].' rev-parse --short '.$branchName;
+        _LOG('CMD',$cmd);
+        $hash = rtrim(shell_exec($cmd));
 
         $logLine = "Branch '$branchName' was deployed in '".$PROJECTS[$REPO][$branchName]['deployPath'].
             "', commit #$hash";
