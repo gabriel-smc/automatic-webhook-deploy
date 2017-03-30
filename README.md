@@ -45,7 +45,7 @@ Back on your server, edit your **~/.ssh/config** file to add _bitbucket.org_ as 
 
 ```
 Host bitbucket.org
-	IdentityFile ~/.ssh/bitbucket_rsa
+    IdentityFile ~/.ssh/bitbucket_rsa
 ```
 
 Whenever you do a git fetch Bitbucket will verify your identity automatically, without prompting you for a password.
