@@ -1,23 +1,23 @@
 <?php
-
-/*{{{ v.150906.001 (0.0.1)
-
-    Bitbucket webhook interface.
-
-    Based on 'Automated git deployment' script by Jonathan Nicoal:
-    http://jonathannicol.com/blog/2013/11/19/automated-git-deployments-from-bitbucket/
-
-    See README.md and config.sample.php
-
-    ---
-    Igor Lilliputten
-    mailto: igor at lilliputten dot ru
-    http://lilliputtem.ru/
-
-    Ivan Pushkin
-    mailto: iv dot pushk at gmail dot com
-
-}}}*/
+/**
+ * @module bitbucket-hook
+ * @version 2018.10.21, 02:50
+ *
+ * Bitbucket webhook interface.
+ *
+ * Based on 'Automated git deployment' script by Jonathan Nicoal:
+ * http://jonathannicol.com/blog/2013/11/19/automated-git-deployments-from-bitbucket/
+ *
+ * See README.md and config.sample.php
+ *
+ * ---
+ * Igor Lilliputten
+ * mailto: igor at lilliputten dot ru
+ * http://lilliputten.ru/
+ *
+ * Ivan Pushkin
+ * mailto: iv dot pushk at gmail dot com
+ */
 
 // Initalize:
 require_once('log.php');

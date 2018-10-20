@@ -1,18 +1,18 @@
 <?php
-
-/*{{{ v.150906.001 (0.0.1)
-
-    Logging module.
-
-    ---
-    Igor Lilliputten
-    mailto: igor at lilliputten dot ru
-    http://lilliputtem.ru/
-
-    Ivan Pushkin
-    mailto: iv dot pushk at gmail dot com
-
-}}}*/
+/**
+ * @module log
+ * @version 2018.10.21, 00:24
+ *
+ * Logging module.
+ *
+ * ---
+ * Igor Lilliputten
+ * mailto: igor at lilliputten dot ru
+ * http://lilliputten.ru/
+ *
+ * Ivan Pushkin
+ * mailto: iv dot pushk at gmail dot com
+ */
 
 /*{{{ Global variables */
 
@@ -26,8 +26,6 @@ function _LOG_CLEAR ()/*{{{*/
     global $_LOG_FILE;
 
     if ( !empty($GLOBALS['_LOG_ENABLED']) ) {
-        // file_put_contents($GLOBALS['_LOG_FILE'], "", LOCK_EX);
-        // flush();
         if ( is_file($_LOG_FILE) ) {
             unlink($_LOG_FILE);
         }
@@ -43,9 +41,19 @@ function _LOG ($s)/*{{{*/
 }/*}}}*/
 function _LOG_VAR ($s,$p)/*{{{*/
 {
-    _LOG($s.': '.print_r($p,true));
+    _LOG($s.': '.var_export($p,true));
 }/*}}}*/
 function _ERROR ($s)/*{{{*/
 {
     _LOG('ERROR: '.$s);
 }/*}}}*/
+function _DEBUG ($s)/*{{{*/
+{
+    global $CONFIG;
+    _LOG('DEBUG: '.$s);
+}/*}}}*/
+function _DEBUG_VAR ($s,$p)/*{{{*/
+{
+    _DEBUG($s.': '.var_export($p,true)); // print_r($p,true));
+}/*}}}*/
+

@@ -1,8 +1,7 @@
 <?php
 /**
- *
  * @module sample-config
- * @version xx
+ * @version 2018.10.21, 02:50
  *
  * Sample config file for bitbucket hooks.
  *
@@ -18,7 +17,6 @@
  *
  * Ivan Pushkin
  * mailto: iv dot pushk at gmail dot com
- *
  */
 
 // Base tool configuration:
