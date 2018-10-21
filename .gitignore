@@ -6,5 +6,9 @@
 *~
 .idea
 
-# Ignoring user's custom configuration (?)
+# Custom configuration (?)
 config.php
+
+# Misc dev. stuff
+test*
+.test*
