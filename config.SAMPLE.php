@@ -5,6 +5,8 @@
  *
  * Sample config file for bitbucket hooks.
  *
+ * Rename or copy it to `config.php`.
+ *
  * Based on 'Automated git deployment' script by Jonathan Nicoal:
  * http://jonathannicol.com/blog/2013/11/19/automated-git-deployments-from-bitbucket/
  *
@@ -43,11 +45,11 @@ $CONFIG = array(
     /** show debug info in log, optional */
     'verbose' => true,
 
-    /** Show debug info in log, optional */
-    'logDebug' => true,
-
-    /** Show payload contents in log, optional */
+    /** Show payload contents in log, optional (ATTENTION: May be very expensive output!) */
     'logPayload' => false,
+
+    /** Show debug info in log, optional */
+    'logDebug' => false,
 
 );
 
