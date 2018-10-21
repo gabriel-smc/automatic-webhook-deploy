@@ -28,6 +28,9 @@ $CONFIG = array(
     /** Folder containing all repositories, *REQUIRED* */
     'repositoriesPath' => '/path/to/repositories',
 
+    /** creating folder mode, optional */
+    'folderMode' => 0700,
+
     /** Enable logging, optional */
     'log' => true,
 
@@ -40,8 +43,11 @@ $CONFIG = array(
     /** show debug info in log, optional */
     'verbose' => true,
 
-    /** creating folder mode, optional */
-    'folderMode' => 0700,
+    /** Show debug info in log, optional */
+    'logDebug' => true,
+
+    /** Show payload contents in log, optional */
+    'logPayload' => false,
 
 );
 
