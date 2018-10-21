@@ -21,6 +21,27 @@ $_LOG_ENABLED = false;     // set to 'true' for enabling logging
 
 /*}}}*/
 
+function _LOG_INIT ()/*{{{*/
+{
+    global $CONFIG, $_LOG_ENABLED, $_LOG_FILE;
+
+    if ( !empty($CONFIG['log']) ) {
+        $_LOG_ENABLED = true;
+    }
+
+    if ( !empty($CONFIG['logFile']) ) {
+        $_LOG_FILE = $CONFIG['logFile'];
+    }
+
+    if ( !empty($CONFIG['setTimezone']) ) {
+        date_default_timezone_set($CONFIG['setTimezone']);
+    }
+
+    if ( !empty($CONFIG['logClear']) ) {
+        _LOG_CLEAR();
+    }
+
+}/*}}}*/
 function _LOG_CLEAR ()/*{{{*/
 {
     global $_LOG_FILE;

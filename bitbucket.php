@@ -64,17 +64,7 @@ function initConfig ()/*{{{ Initializing repo configs */
 }/*}}}*/
 function initLog ()/*{{{ Initializing log variables */
 {
-    global $CONFIG, $_LOG_ENABLED, $_LOG_FILE;
-
-    if ( !empty($CONFIG['log']) ) {
-        $_LOG_ENABLED = true;
-    }
-    if ( !empty($CONFIG['logFile']) ) {
-        $_LOG_FILE = $CONFIG['logFile'];
-    }
-    if ( !empty($CONFIG['logClear']) ) {
-        _LOG_CLEAR();
-    }
+    _LOG_INIT();
 
 }/*}}}*/
 function initPayload ()/*{{{ Get posted data */
@@ -238,7 +228,7 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
     // Checkout project files
     foreach ( $BRANCHES as $branchName ) {
         $cmd = 'cd '.$repoPath.' && GIT_WORK_TREE='.$PROJECTS[$REPO][$branchName]['deployPath']
-            .' '.$CONFIG['gitCommand'].' checkout -f '.$branchName;
+            .' '.$CONFIG['gitCommand'].' checkout -f '.$branchName.' 2>&1';
         _LOG_VAR('cmd',$cmd);
         // system($cmd, $status);
         exec($cmd, $output, $status);
@@ -249,7 +239,7 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
         }
 
         if ( !empty($PROJECTS[$REPO][$branchName]['postHookCmd']) ) {
-            $cmd = 'cd '.$PROJECTS[$REPO][$branchName]['deployPath'].' && '.$PROJECTS[$REPO][$branchName]['postHookCmd'];
+            $cmd = 'cd '.$PROJECTS[$REPO][$branchName]['deployPath'].' && '.$PROJECTS[$REPO][$branchName]['postHookCmd'].' 2>&1';
             _LOG_VAR('cmd',$cmd);
             // system($cmd, $status);
             exec($cmd, $output, $status);
@@ -261,6 +251,7 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
         }
 
         // Log the deployment
+        // TODO: Catch output & errors (` 2>&1`)???
         $cmd = 'cd '.$repoPath.' && '.$CONFIG['gitCommand'].' rev-parse --short '.$branchName;
         _LOG_VAR('cmd',$cmd);
         $hash = rtrim(shell_exec($cmd));

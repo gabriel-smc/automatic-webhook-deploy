@@ -51,6 +51,9 @@ $CONFIG = array(
     /** Show debug info in log, optional */
     'logDebug' => false,
 
+    // /** If specified then setup default php timezone (if server's PHP is misconfigured) */
+    // 'setTimezone' => 'UTC',
+
 );
 
 /** List of deployed projects... */
