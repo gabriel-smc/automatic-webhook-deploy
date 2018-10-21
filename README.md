@@ -54,11 +54,7 @@ On the Bitbucket website navigate to your repository's _Administration > Webhook
 
 For more detailed information see the [original Jonathan's page](http://jonathannicol.com/blog/2013/11/19/automated-git-deployments-from-bitbucket/), look config file and source code or simply ask me.
 
-## Changes
+## See also
 
-### 2016.03.25, v.0.0.3
-### 2015.10.05, v.0.0.2
+- [Changelog](CHANGELOG.md)
 
-- Added project parameter for post deploy execution: `$PROJECTS['repo-name']['postHookCmd']` (see _config.sample.php_). For example, touch _index.wsgi_ for django configuration reloading: `... 'postHookCmd' => 'touch index.wsgi', ...`. Command running in project folder (specified by `deployPath` parameter.
-
-## TODO
