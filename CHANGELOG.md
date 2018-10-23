@@ -2,6 +2,7 @@
 
 ## v.0.1.1 (2018.10.21)
 
+- Escaping potential spaces in file names.
 - Added config option `setTimezone` for misconfigured php server.
 - Verbose exec errors (show error messages in log).
 - Ensuring folder modes after `mkdir` (calling `chmod`). In some cases mkdir makes default modes.
