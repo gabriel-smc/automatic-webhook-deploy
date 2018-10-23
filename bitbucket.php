@@ -138,15 +138,15 @@ function checkPaths ()/*{{{ Check repository and project paths; create them if n
     global $REPO, $CONFIG, $PROJECTS, $BRANCHES;
 
     // Check for repositories folder path; create if absent
-    $repositoriesPath = $CONFIG['repositoriesPath'];
-    if ( !is_dir($repositoriesPath) ) {
+    $repoRoot = $CONFIG['repositoriesPath'];
+    if ( !is_dir($repoRoot) ) {
         $mode = $CONFIG['folderMode'];
-        if ( mkdir($repositoriesPath,$mode,true) ) {
-            chmod($repositoriesPath,$mode); // NOTE: Ensuring folder mode!
-            _LOG("Creating repository folder '".$repositoriesPath." (".decoct($mode).") for '$REPO'");
+        if ( mkdir($repoRoot,$mode,true) ) {
+            chmod($repoRoot,$mode); // NOTE: Ensuring folder mode!
+            _LOG("Creating root repositories folder '".$repoRoot." (".decoct($mode).") for '$REPO'");
         }
         else {
-            _ERROR("Error creating repository folder '".$repositoriesPath." for '$REPO'! Exiting.");
+            _ERROR("Error creating root repositories folder '".$repoRoot." for '$REPO'! Exiting.");
             exit;
         }
     }
@@ -185,14 +185,15 @@ function fetchRepository ()/*{{{ Fetch or clone repository */
     global $REPO, $REPO_NAME, $CONFIG;
 
     // Compose current repository path
-    $repoPath = $CONFIG['repositoriesPath'].DIRECTORY_SEPARATOR.$REPO_NAME.'.git';
+    $repoRoot = $CONFIG['repositoriesPath'];
+    $repoPath = $repoRoot.DIRECTORY_SEPARATOR.$REPO_NAME.'.git';
 
     // If repository or repository folder are absent then clone full repository
     if ( !is_dir($repoPath) || !is_file($repoPath.DIRECTORY_SEPARATOR.'HEAD') ) {
         _LOG("Repository folder absent for '$REPO', cloning...");
 
-        $cmd = 'cd '.$CONFIG['repositoriesPath'].' && '.$CONFIG['gitCommand'].
-            ' clone --mirror git@bitbucket.org:'.$REPO.'.git 2>&1';
+        $cmd = 'cd "'.$repoRoot.'" && '.$CONFIG['gitCommand']
+            .' clone --mirror git@bitbucket.org:'.$REPO.'.git "'.$REPO_NAME.'" 2>&1';
         _LOG_VAR('cmd',$cmd);
         // system($cmd, $status);
         exec($cmd, $output, $status);
@@ -206,7 +207,7 @@ function fetchRepository ()/*{{{ Fetch or clone repository */
     else {
         _LOG("Repositury folder exists for '$REPO', fetching...");
 
-        $cmd = 'cd '.$repoPath.' && '.$CONFIG['gitCommand'].' fetch 2>&1';
+        $cmd = 'cd "'.$repoPath.'" && '.$CONFIG['gitCommand'].' fetch 2>&1';
         _LOG_VAR('cmd',$cmd);
         // system($cmd, $status);
         exec($cmd, $output, $status);
@@ -227,8 +228,10 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
 
     // Checkout project files
     foreach ( $BRANCHES as $branchName ) {
-        $cmd = 'cd '.$repoPath.' && GIT_WORK_TREE='.$PROJECTS[$REPO][$branchName]['deployPath']
-            .' '.$CONFIG['gitCommand'].' checkout -f '.$branchName.' 2>&1';
+
+        $deployPath = $PROJECTS[$REPO][$branchName]['deployPath'];
+
+        $cmd = 'cd "'.$repoPath.'" && GIT_WORK_TREE="'.$deployPath.'" '.$CONFIG['gitCommand'].' checkout -f '.$branchName.' 2>&1';
         _LOG_VAR('cmd',$cmd);
         // system($cmd, $status);
         exec($cmd, $output, $status);
@@ -238,8 +241,9 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
             exit;
         }
 
-        if ( !empty($PROJECTS[$REPO][$branchName]['postHookCmd']) ) {
-            $cmd = 'cd '.$PROJECTS[$REPO][$branchName]['deployPath'].' && '.$PROJECTS[$REPO][$branchName]['postHookCmd'].' 2>&1';
+        $postHookCmd = $PROJECTS[$REPO][$branchName]['postHookCmd'];
+        if ( !empty($postHookCmd) ) {
+            $cmd = 'cd "'.$deployPath.'" && '.$postHookCmd.' 2>&1';
             _LOG_VAR('cmd',$cmd);
             // system($cmd, $status);
             exec($cmd, $output, $status);
@@ -252,13 +256,10 @@ function checkoutProject ()/*{{{ Checkout project into target folder */
 
         // Log the deployment
         // TODO: Catch output & errors (` 2>&1`)???
-        $cmd = 'cd '.$repoPath.' && '.$CONFIG['gitCommand'].' rev-parse --short '.$branchName;
+        $cmd = 'cd "'.$repoPath.'" && '.$CONFIG['gitCommand'].' rev-parse --short '.$branchName;
         _LOG_VAR('cmd',$cmd);
         $hash = rtrim(shell_exec($cmd));
 
-        $logLine = "Branch '$branchName' was deployed in '".$PROJECTS[$REPO][$branchName]['deployPath'].
-            "', commit #$hash";
-
-        _LOG($logLine);
+        _LOG("Branch '$branchName' was deployed in '".$deployPath."', commit #$hash");
     }
 }/*}}}*/
