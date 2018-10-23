@@ -5,9 +5,9 @@ Based on [«Automated git deployment» script](http://jonathannicol.com/blog/201
 
 Some fragments of this manual was taken from Jonathan Nicoal's documentation page.
 
-Version: 0.2.1
-Last changes: 2018.10.23
-See [Changelog](CHANGELOG.md)
+- Version: 0.2.1
+- Last changes: 2018.10.23
+- See [Changelog](CHANGELOG.md)
 
 Documentation is in progress.
 
@@ -55,5 +55,5 @@ On the Bitbucket website navigate to your repository's _Administration > Webhook
 
 ## See also
 
-- [Changelog](CHANGELOG.md)
 - [Original Jonathan Nicoal's page](http://jonathannicol.com/blog/2013/11/19/automated-git-deployments-from-bitbucket/)
+- [Build, test, and deploy with Pipelines - Atlassian Documentation](https://confluence.atlassian.com/bitbucket/bitbucket-pipelines-792496469.html)
