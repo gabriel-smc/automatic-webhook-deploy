@@ -193,7 +193,7 @@ function fetchRepository ()/*{{{ Fetch or clone repository */
         _LOG("Repository folder absent for '$REPO', cloning...");
 
         $cmd = 'cd "'.$repoRoot.'" && '.$CONFIG['gitCommand']
-            .' clone --mirror git@bitbucket.org:'.$REPO.'.git "'.$REPO_NAME.'" 2>&1';
+            .' clone --mirror git@bitbucket.org:'.$REPO.'.git "'.$REPO_NAME.'.git" 2>&1';
         _LOG_VAR('cmd',$cmd);
         // system($cmd, $status);
         exec($cmd, $output, $status);
