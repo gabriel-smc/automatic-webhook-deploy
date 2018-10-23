@@ -1,7 +1,7 @@
 {
   "author": "lilliputten <lilliputten@yandex.ru>",
   "name": "automatic-bitbucket-deploy",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "repository": {
     "type": "git",
     "url": "git@bitbucket.org:lilliputten/automatic-bitbucket-deploy.git"

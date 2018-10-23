@@ -1,7 +1,7 @@
 <?php
 /**
  * @module bitbucket
- * @version 2018.10.21, 02:50
+ * @version 2018.10.23, 20:44
  *
  * Routines for work with bitbucket server, repositories and projects.
  *
@@ -114,7 +114,12 @@ function fetchParams ()/*{{{ Get parameters from bitbucket payload now only (REP
         exit;
     }
 
-    $REPO_NAME = strtolower($PAYLOAD->repository->name);
+    // NOTE: ATTENTION 2018.10.23, 20:45 -- Sometimes
+    // `$PAYLOAD->repository->name` has repository name in free form (with
+    // spaces etc). Now using two-level folders structure in `repositoriesPath`
+    // -- repositories stored with specified usernames.
+    // $REPO_NAME = strtolower($PAYLOAD->repository->name); // OLD buggy (?) code.
+    $REPO_NAME = $REPO; // preg_replace('/\//', '-', $REPO);
     _LOG_VAR('Repository name', $REPO_NAME);
 
     foreach ( $PAYLOAD->push->changes as $change ) {
