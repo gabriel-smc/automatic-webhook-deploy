@@ -5,8 +5,9 @@ Based on [«Automated git deployment» script](http://jonathannicol.com/blog/201
 
 Some fragments of this manual was taken from Jonathan Nicoal's documentation page.
 
-Version: 0.1.1
-Last changes: 2018.10.21
+Version: 0.2.1
+Last changes: 2018.10.23
+See [Changelog](CHANGELOG.md)
 
 Documentation is in progress.
 
