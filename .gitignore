@@ -4,6 +4,7 @@
 *.tmp
 *.log
 *~
+*_
 .idea
 
 # Custom configuration (?)

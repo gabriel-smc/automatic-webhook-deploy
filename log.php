@@ -41,6 +41,10 @@ function _LOG_INIT ()/*{{{*/
         _LOG_CLEAR();
     }
 
+    if ( !empty($CONFIG['verbose']) ) {
+        _LOG_VAR('CONFIG', $CONFIG);
+    }
+
 }/*}}}*/
 function _LOG_CLEAR ()/*{{{*/
 {
