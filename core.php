@@ -270,7 +270,7 @@ function fetchRepository ()/*{{{ Fetch or clone repository */
     }
     // Else fetch changes
     else {
-        _LOG("Repositury folder exists for '$REPO', fetching...");
+        _LOG("Repository folder exists for '$REPO', fetching...");
 
         $cmd = 'cd "'.$repoPath.'" && '.$CONFIG['gitCommand'].' fetch 2>&1';
         _LOG_VAR('cmd',$cmd);
