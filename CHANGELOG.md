@@ -1,5 +1,15 @@
 # Changelog
 
+## v.0.3.0 (2019.01.25)
+
+- Added github support.
+- Respository folders creating as `{REPO_TYPE}-{OWNER}-{REPO_NAME}.git` (in
+  folder specified by `$CONFIG['repositoriesPath']` -- see config). `REPO_TYPE`
+  can be 'bitbucket' or 'github'.
+- `bitbucket-hook.php` renamed to `webhook.php`. Created `bitbucket-hook.php`
+  stub (just includes `webhook.php`) for compatibility with previous versions.
+- Github repository name changed to `automatic-webhook-deploy`.
+
 ## v.0.2.1 (2018.10.23)
 
 - Using config repository key (in form `username/repo-name`) as repository

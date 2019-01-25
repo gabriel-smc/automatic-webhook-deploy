@@ -1,7 +1,7 @@
 <?php
 /**
  * @module bitbucket
- * @version 2019.01.25, 07:26
+ * @version 2019.01.25, 21:45
  *
  * Routines for work with bitbucket server, repositories and projects.
  *
@@ -34,8 +34,8 @@ $REPO_PATH_NAME = ''; // Repository folder path (under `$REPOSITORIES_PATH` -- s
 $REPO_TYPE = ''; // Repository type: bitbucket|github
 $REPO_URL_PREFIX = ''; // Repo url prefix from `$REPO_URL_PREFIXES` for `$REPO_TYPE`
 $REPO_URL_PREFIXES = array(
-	'bitbucket' => 'git@bitbucket.org',
-	'github' => 'git@github.com',
+    'bitbucket' => 'git@bitbucket.org',
+    'github' => 'git@github.com',
 );
 
 /*}}}*/
@@ -63,8 +63,8 @@ function initConfig ()/*{{{ Initializing repo configs */
         $CONFIG['folderMode'] = DEFAULT_FOLDER_MODE;
     }
 
-	// NOTE: Log may be flushed in `_LOG_INIT` after `initConfig`
-	// Do not use logging here!
+    // NOTE: Log may be flushed in `_LOG_INIT` after `initConfig`
+    // Do not use logging here!
 
 }/*}}}*/
 function initLog ()/*{{{ Initializing log variables */
@@ -76,15 +76,15 @@ function initPayload ()/*{{{ Get posted data */
 {
     global $CONFIG, $PAYLOAD, $REPO_TYPE, $REPO_URL_PREFIXES, $REPO_URL_PREFIX;
 
-	// EXAMPLE:
-	// HTTP_X_EVENT_KEY|HTTP_X_GITHUB_EVENT=repo:push
-	// HTTP_X_HOOK_UUID|HTTP_X_GITHUB_DELIVERY=5233528b-6d0d-4f41-a155-3b1c0dc2c566
-	// HTTP_USER_AGENT=Bitbucket-Webhooks/2.0
+    // EXAMPLE:
+    // HTTP_X_EVENT_KEY|HTTP_X_GITHUB_EVENT=repo:push
+    // HTTP_X_HOOK_UUID|HTTP_X_GITHUB_DELIVERY=5233528b-6d0d-4f41-a155-3b1c0dc2c566
+    // HTTP_USER_AGENT=Bitbucket-Webhooks/2.0
 
-	$event = isset($_SERVER['HTTP_X_EVENT_KEY']) ? $_SERVER['HTTP_X_EVENT_KEY'] : $_SERVER['HTTP_X_GITHUB_EVENT'];
-	$hook = isset($_SERVER['HTTP_X_HOOK_UUID']) ? $_SERVER['HTTP_X_HOOK_UUID'] : $_SERVER['HTTP_X_GITHUB_DELIVERY'];
-	$agent = $_SERVER['HTTP_USER_AGENT'];
-	$addr = $_SERVER['REMOTE_ADDR'];
+    $event = isset($_SERVER['HTTP_X_EVENT_KEY']) ? $_SERVER['HTTP_X_EVENT_KEY'] : $_SERVER['HTTP_X_GITHUB_EVENT'];
+    $hook = isset($_SERVER['HTTP_X_HOOK_UUID']) ? $_SERVER['HTTP_X_HOOK_UUID'] : $_SERVER['HTTP_X_GITHUB_DELIVERY'];
+    $agent = $_SERVER['HTTP_USER_AGENT'];
+    $addr = $_SERVER['REMOTE_ADDR'];
 
     if (!empty($event) && !empty($hook) && !empty($agent) && !empty($addr)) {
         _LOG('*** ' . $event . ' #' . $hook . ' (' . $agent . ' from ' . $addr . ')');
@@ -107,35 +107,35 @@ function initPayload ()/*{{{ Get posted data */
         _LOG_VAR('PAYLOAD',$PAYLOAD);
     }
 
-	// Check for correct payload data received...
+    // Check for correct payload data received...
     if (isset($PAYLOAD->repository->name)) {
-		// Bitbucket mode (changes list)...
-		if (isset($PAYLOAD->push->changes)) {
-			_LOG("Detected bitbucket mode (changes list)");
-			$REPO_TYPE = 'bitbucket';
-		}
-		// Github mode (one branch)...
-		else if (isset($PAYLOAD->ref)) {
-			_LOG("Detected github mode (one branch)");
-			$REPO_TYPE = 'github';
-		}
-		// Error???
+        // Bitbucket mode (changes list)...
+        if (isset($PAYLOAD->push->changes)) {
+            _LOG("Detected bitbucket mode (changes list)");
+            $REPO_TYPE = 'bitbucket';
+        }
+        // Github mode (one branch)...
+        else if (isset($PAYLOAD->ref)) {
+            _LOG("Detected github mode (one branch)");
+            $REPO_TYPE = 'github';
+        }
+        // Error???
     }
 
-	if (empty($REPO_TYPE)) {
+    if (empty($REPO_TYPE)) {
         _ERROR("Invalid payload data was received -- Cannot detect repository mode (bitbucket, github)!");
         exit;
-	}
+    }
 
-	// Determine url prefix by repository type
-	$REPO_URL_PREFIX = $REPO_URL_PREFIXES[$REPO_TYPE];
+    // Determine url prefix by repository type
+    $REPO_URL_PREFIX = $REPO_URL_PREFIXES[$REPO_TYPE];
 
-	if (empty($REPO_URL_PREFIX)) {
+    if (empty($REPO_URL_PREFIX)) {
         _ERROR("Invalid payload data was received -- Cannot detect repository url prefix!");
         exit;
-	}
+    }
 
-	_LOG('Repository url prefix: ' . $REPO_URL_PREFIX);
+    _LOG('Repository url prefix: ' . $REPO_URL_PREFIX);
 
 }/*}}}*/
 function fetchParams ()/*{{{ Get parameters from bitbucket payload now only (REPO) */
@@ -150,42 +150,42 @@ function fetchParams ()/*{{{ Get parameters from bitbucket payload now only (REP
         exit;
     }
 
-	// Fetch branches...
+    // Fetch branches...
 
-	// Bitbucket mode (changes list)...
-	if ($REPO_TYPE === 'bitbucket') {
-		_LOG("Bitbucket mode (changes list)");
-		foreach ( $PAYLOAD->push->changes as $change ) {
-			// TODO: Fetch branch name for github from `$PAYLOAD->ref`
-			if (is_object($change->new) && $change->new->type == "branch") {
-				$branchName = $change->new->name;
-				_LOG("Found bitbucket branch: " . $branchName);
-				if (isset($PROJECTS[$REPO][$branchName])) {
-					// Create branch name for checkout
-					array_push($BRANCHES, $branchName);
-					_LOG("Changes in branch '".$branchName."' was found");
-				}
-			}
-		}
-	}
-	// Github mode (one branch)...
-	else if ($REPO_TYPE === 'github') {
-		_LOG("Github mode (one branch)");
-		$branchName = preg_replace('/refs\/heads\//', '', $PAYLOAD->ref);
-		_LOG("Found github branch: " . $branchName);
-		if (isset($PROJECTS[$REPO][$branchName])) {
-			// Create branch name for checkout
-			array_push($BRANCHES, $branchName);
-			_LOG("Changes in branch '".$branchName."' was found");
-		}
-	}
+    // Bitbucket mode (changes list)...
+    if ($REPO_TYPE === 'bitbucket') {
+        _LOG("Bitbucket mode (changes list)");
+        foreach ( $PAYLOAD->push->changes as $change ) {
+            // TODO: Fetch branch name for github from `$PAYLOAD->ref`
+            if (is_object($change->new) && $change->new->type == "branch") {
+                $branchName = $change->new->name;
+                _LOG("Found bitbucket branch: " . $branchName);
+                if (isset($PROJECTS[$REPO][$branchName])) {
+                    // Create branch name for checkout
+                    array_push($BRANCHES, $branchName);
+                    _LOG("Changes in branch '".$branchName."' was found");
+                }
+            }
+        }
+    }
+    // Github mode (one branch)...
+    else if ($REPO_TYPE === 'github') {
+        _LOG("Github mode (one branch)");
+        $branchName = preg_replace('/refs\/heads\//', '', $PAYLOAD->ref);
+        _LOG("Found github branch: " . $branchName);
+        if (isset($PROJECTS[$REPO][$branchName])) {
+            // Create branch name for checkout
+            array_push($BRANCHES, $branchName);
+            _LOG("Changes in branch '".$branchName."' was found");
+        }
+    }
 
     if ( empty($BRANCHES) ) {
         _ERROR("Nothing to update (no branches found)! Please check correct branch names in your config PROJECTS list.");
-		// TODO: exit?
+        // TODO: exit?
     }
 
-	// Construct repository folder name
+    // Construct repository folder name
     // NOTE: ATTENTION 2018.10.23, 20:45 -- Sometimes
     // `$PAYLOAD->repository->name` has repository name in free form (with
     // spaces etc). Now using two-level folders structure in `repositoriesPath`
@@ -235,7 +235,7 @@ function checkPaths ()/*{{{ Check repository and project paths; create them if n
 }/*}}}*/
 function placeVerboseInfo ()/*{{{ Place verbose log information -- if specified in config */
 {
-    global $REPO, $REPO_PATH_NAME, $CONFIG, $BRANCHES;
+    global $CONFIG; // , $REPO, $BRANCHES;
 
     if ( $CONFIG['verbose'] ) {
         // _LOG_VAR('REPO',$REPO);
@@ -255,7 +255,7 @@ function fetchRepository ()/*{{{ Fetch or clone repository */
     if ( !is_dir($repoPath) || !is_file($repoPath.DIRECTORY_SEPARATOR.'HEAD') ) {
         _LOG("Repository folder absent for '$REPO', cloning...");
 
-		$repoUrl = $REPO_URL_PREFIX.':'.$REPO.'.git';
+        $repoUrl = $REPO_URL_PREFIX.':'.$REPO.'.git';
 
         $cmd = 'cd "'.$repoRoot.'" && '.$CONFIG['gitCommand']
             .' clone --mirror '.$repoUrl.' "'.$REPO_PATH_NAME.'" 2>&1';

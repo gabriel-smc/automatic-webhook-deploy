@@ -1,16 +1,8 @@
 {
   "author": "lilliputten <lilliputten@yandex.ru>",
-  "name": "automatic-bitbucket-deploy",
-  "version": "0.2.1",
-  "repository": {
-    "type": "git",
-    "url": "git@bitbucket.org:lilliputten/automatic-bitbucket-deploy.git"
-  },
-  "dependencies": {
-  },
-  "devDependencies": {
-  },
+  "name": "automatic-webhook-deploy",
+  "version": "0.3.0",
   "scripts": {
-      "postinstall": "echo --Creating config from scratch-- && cp config.SAMPLE.php config.php"
+    "scratch-config": "echo --Creating config from scratch-- && cp config.SAMPLE.php config.php"
   }
 }
