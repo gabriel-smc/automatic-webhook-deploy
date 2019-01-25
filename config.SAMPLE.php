@@ -1,9 +1,9 @@
 <?php
 /**
  * @module sample-config
- * @version 2018.10.21, 02:50
+ * @version 2019.01.25, 22:07
  *
- * Sample config file for bitbucket hooks.
+ * Sample config file for bitbucket/github hooks.
  *
  * Rename or copy it to `config.php`.
  *
@@ -27,22 +27,22 @@ $CONFIG = array(
     /** Git command, *REQUIRED* */
     'gitCommand' => 'git',
 
-    /** Folder containing all repositories, *REQUIRED* */
+    /** Absolute folder containing all repositories, *REQUIRED* */
     'repositoriesPath' => '/path/to/repositories',
 
     /** creating folder mode, optional */
     'folderMode' => 0700,
 
     /** Enable logging, optional */
-    'log' => true,
+    'log' => false,
 
     /** Logging file name, optional */
-    'logFile' => 'bitbucket.log',
+    'logFile' => 'hooks.log',
 
     /** clear log each time, optional */
     'logClear' => true,
 
-    /** show debug info in log, optional */
+    /** show extra info (eg config data) in log, optional */
     'verbose' => true,
 
     /** Show payload contents in log, optional (ATTENTION: May be very expensive output!) */
@@ -59,25 +59,25 @@ $CONFIG = array(
 /** List of deployed projects... */
 $PROJECTS = array(
 
-    /** The key is a bitbucket.org repository full name *REQUIRED* */
-    'bitbucketUsername/repoName-1' => array(
+    /** The key is a repository full name in form `owner/repository` *REQUIRED* */
+    'owner/repo-1' => array(
 
-        /** Branch name */
+        /** Master branch */
         'master' => array(
 
-            /** Path to deploy project, *REQUIRED* */
-            'deployPath'  => '/deploy_path',
+            /** Absolute path to deploy project, *REQUIRED* */
+            'deployPath'  => '/path/deploy_folder',
 
             /** command to execute after deploy, optional */
             // 'postHookCmd' => 'your_command',
 
         ),
 
-        /** Branch name */
+        /** Some other branch */
         'featureBranch' => array(
 
-            /** Path to deploy project, *REQUIRED* */
-            'deployPath'  => '/feature_deploy_path',
+            /** Absolute path to deploy project, *REQUIRED* */
+            'deployPath'  => '/path/feature_deploy_folder',
 
             /** command to execute after deploy, optional */
             // 'postHookCmd' => 'your_command',
@@ -86,14 +86,14 @@ $PROJECTS = array(
 
     ),
 
-    /** The key is a bitbucket.org repository full name *REQUIRED* */
-    'bitbucketUsername/repoName-N' => array(
+    /** The key is a repository full name in form `owner/repository` *REQUIRED* */
+    'owner/repo-2' => array(
 
-        /** Branch name */
+        /** Master branch */
         'someBranchName' => array(
 
-            /** Path to deploy project, *REQUIRED* */
-            'deployPath'  => '/some_deploy_path',
+            /** Absolute path to deploy project, *REQUIRED* */
+            'deployPath'  => '/path/another_deploy_folder',
 
             /** command to execute after deploy, optional */
             // 'postHookCmd' => 'your_command',
