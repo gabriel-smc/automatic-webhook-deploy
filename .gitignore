@@ -1,3 +1,5 @@
+# Custom configuration (?)
+config.php
 
 # Temp files...
 .*.sw?
@@ -6,9 +8,6 @@
 *~
 *_
 .idea
-
-# Custom configuration (?)
-config.php
 
 # Misc dev. stuff
 test*

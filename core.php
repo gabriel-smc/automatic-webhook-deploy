@@ -30,7 +30,7 @@ if ( !defined('NL') ) {
 $PAYLOAD   = array ();
 $BRANCHES  = array ();
 $REPO      = ''; // Repository name (owner/name)
-$REPO_PATH_NAME = ''; // Repository folder path (under `$REPOSITORIES_PATH` -- see config)
+$REPO_FOLDER_NAME = ''; // Repository folder path (under `$REPOSITORIES_PATH` -- see config)
 $REPO_TYPE = ''; // Repository type: bitbucket|github
 $REPO_URL_PREFIX = ''; // Repo url prefix from `$REPO_URL_PREFIXES` for `$REPO_TYPE`
 $REPO_URL_PREFIXES = array(
@@ -87,9 +87,9 @@ function initPayload ()/*{{{ Get posted data */
     $addr = $_SERVER['REMOTE_ADDR'];
 
     if (!empty($event) && !empty($hook) && !empty($agent) && !empty($addr)) {
-        _LOG('*** ' . $event . ' #' . $hook . ' (' . $agent . ' from ' . $addr . ')');
+        _LOG('*** ' . $event . ' #' . $hook . ' (' . $agent . '@' . $addr . ')');
     } else {
-        _LOG('*** [unknown http event key] #[unknown http hook uuid] (unknown http user agent/addr)');
+        _LOG('*** Cannot detect event, hook id, remote agent or address!');
     }
 
     if ( isset($_POST['payload']) ) { // old method
@@ -140,7 +140,7 @@ function initPayload ()/*{{{ Get posted data */
 }/*}}}*/
 function fetchParams ()/*{{{ Get parameters from bitbucket payload now only (REPO) */
 {
-    global $CONFIG, $REPO, $REPO_PATH_NAME, $REPO_TYPE, $PAYLOAD, $PROJECTS, $BRANCHES;
+    global $CONFIG, $REPO, $REPO_FOLDER_NAME, $REPO_TYPE, $PAYLOAD, $PROJECTS, $BRANCHES;
 
     // Get repository name:
     $REPO = strtolower($PAYLOAD->repository->full_name);
@@ -163,7 +163,7 @@ function fetchParams ()/*{{{ Get parameters from bitbucket payload now only (REP
                 if (isset($PROJECTS[$REPO][$branchName])) {
                     // Create branch name for checkout
                     array_push($BRANCHES, $branchName);
-                    _LOG("Changes in branch '".$branchName."' was found");
+                    _LOG("Found changes in branch: ".$branchName);
                 }
             }
         }
@@ -176,7 +176,7 @@ function fetchParams ()/*{{{ Get parameters from bitbucket payload now only (REP
         if (isset($PROJECTS[$REPO][$branchName])) {
             // Create branch name for checkout
             array_push($BRANCHES, $branchName);
-            _LOG("Changes in branch '".$branchName."' was found");
+            _LOG("Changes in branch in branch:".$branchName);
         }
     }
 
@@ -190,9 +190,9 @@ function fetchParams ()/*{{{ Get parameters from bitbucket payload now only (REP
     // `$PAYLOAD->repository->name` has repository name in free form (with
     // spaces etc). Now using two-level folders structure in `repositoriesPath`
     // -- repositories stored with specified usernames.
-    // $REPO_PATH_NAME = strtolower($PAYLOAD->repository->name); // OLD buggy (?) code.
-    $REPO_PATH_NAME = $REPO_TYPE . '-' . preg_replace('/\//', '-', $REPO) . '.git';
-    _LOG_VAR('Repository path name', $REPO_PATH_NAME);
+    // $REPO_FOLDER_NAME = strtolower($PAYLOAD->repository->name); // OLD buggy (?) code.
+    $REPO_FOLDER_NAME = $REPO_TYPE . '-' . preg_replace('/\//', '-', $REPO) . '.git';
+    _LOG_VAR('Repository folder name', $REPO_FOLDER_NAME);
 
 
 }/*}}}*/
@@ -245,11 +245,11 @@ function placeVerboseInfo ()/*{{{ Place verbose log information -- if specified 
 }/*}}}*/
 function fetchRepository ()/*{{{ Fetch or clone repository */
 {
-    global $REPO, $REPO_PATH_NAME, $REPO_URL_PREFIX, $CONFIG;
+    global $REPO, $REPO_FOLDER_NAME, $REPO_URL_PREFIX, $CONFIG;
 
     // Compose current repository path
     $repoRoot = $CONFIG['repositoriesPath'];
-    $repoPath = $repoRoot.DIRECTORY_SEPARATOR.$REPO_PATH_NAME;
+    $repoPath = $repoRoot.DIRECTORY_SEPARATOR.$REPO_FOLDER_NAME;
 
     // If repository or repository folder are absent then clone full repository
     if ( !is_dir($repoPath) || !is_file($repoPath.DIRECTORY_SEPARATOR.'HEAD') ) {
@@ -258,7 +258,7 @@ function fetchRepository ()/*{{{ Fetch or clone repository */
         $repoUrl = $REPO_URL_PREFIX.':'.$REPO.'.git';
 
         $cmd = 'cd "'.$repoRoot.'" && '.$CONFIG['gitCommand']
-            .' clone --mirror '.$repoUrl.' "'.$REPO_PATH_NAME.'" 2>&1';
+            .' clone --mirror '.$repoUrl.' "'.$REPO_FOLDER_NAME.'" 2>&1';
         _LOG_VAR('cmd',$cmd);
         // system($cmd, $status);
         exec($cmd, $output, $status);
@@ -286,10 +286,10 @@ function fetchRepository ()/*{{{ Fetch or clone repository */
 }/*}}}*/
 function checkoutProject ()/*{{{ Checkout project into target folder */
 {
-    global $REPO, $REPO_PATH_NAME, $CONFIG, $PROJECTS, $BRANCHES;
+    global $REPO, $REPO_FOLDER_NAME, $CONFIG, $PROJECTS, $BRANCHES;
 
     // Compose current repository path
-    $repoPath = $CONFIG['repositoriesPath'].DIRECTORY_SEPARATOR.$REPO_PATH_NAME;
+    $repoPath = $CONFIG['repositoriesPath'].DIRECTORY_SEPARATOR.$REPO_FOLDER_NAME;
 
     // Checkout project files
     foreach ( $BRANCHES as $branchName ) {
