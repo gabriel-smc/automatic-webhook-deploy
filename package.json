@@ -1,8 +1,19 @@
 {
-  "author": "lilliputten <lilliputten@yandex.ru>",
   "name": "automatic-webhook-deploy",
   "version": "0.3.0",
+  "description": "Automatic deploy for bitbucket.org or github.com webhooks",
+  "author": "lilliputten <lilliputten@yandex.ru>",
+  "keywords": [
+    "git",
+    "webhook",
+    "automatic",
+    "deploy",
+    "sync",
+    "bitbucket",
+    "github"
+  ],
+  "license": "MIT",
   "scripts": {
-    "scratch-config": "echo --Creating config from scratch-- && cp config.SAMPLE.php config.php"
+    "scratch-config": "echo --Create config from scratch-- && cp config.SAMPLE.php config.php"
   }
 }

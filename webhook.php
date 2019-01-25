@@ -1,6 +1,6 @@
 <?php
 /**
- * @module bitbucket-hook
+ * @module webhook
  * @version 2019.01.25, 21:45
  *
  * Bitbucket webhook interface.

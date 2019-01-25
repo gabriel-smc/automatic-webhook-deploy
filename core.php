@@ -1,9 +1,9 @@
 <?php
 /**
- * @module bitbucket
+ * @module core
  * @version 2019.01.25, 21:45
  *
- * Routines for work with bitbucket server, repositories and projects.
+ * Routines for work with bitbucket/github server, repositories and projects.
  *
  * Based on 'Automated git deployment' script by Jonathan Nicoal:
  * http://jonathannicol.com/blog/2013/11/19/automated-git-deployments-from-bitbucket/

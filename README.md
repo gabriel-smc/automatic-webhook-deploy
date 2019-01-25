@@ -1,12 +1,12 @@
 
-# Automatic deployment for bitbucket.org web-based projects
+# Automatic deployment for bitbucket/github web-based projects
 
 Based on [«Automated git deployment» script](http://jonathannicol.com/blog/2013/11/19/automated-git-deployments-from-bitbucket/) by [Jonathan Nicoal](http://jonathannicol.com/). See also [BitBucket Sync](https://bitbucket.org/alixandru/bitbucket-sync) by [alixandru](https://bitbucket.org/alixandru/).
 
 Some fragments of this manual was taken from Jonathan Nicoal's documentation page.
 
-- Version: 0.2.1
-- Last changes: 2018.10.23
+- Version: 0.3.0
+- Last changes: 2019.01.25
 - See [Changelog](CHANGELOG.md)
 
 Documentation is in progress.
@@ -25,7 +25,7 @@ Documentation is in progress.
 - Git installed;
 - Shell access;
 - PHP exec function;
-- SSH key pair for bitbucket created with **empty** passphrase;
+- SSH key pair for bitbucket/github created with **empty** passphrase;
 
 ## Installation
 
@@ -42,16 +42,16 @@ When prompted either accept the default key name (**id_rsa**) or give your key a
 
 A public and private key pair will be generated. Copy your public key — the one with a _.pub_ extension — to the clipboard. On the Bitbucket website navigate to _Account > SSH Keys_, and choose to add a new key. Paste in your public key and save it.
 
-Back on your server, edit your **~/.ssh/config** file to add _bitbucket.org_ as a host. This ensures that the correct key is used when connecting by SSH to _bitbucket.org_. You'll need to create the config file if it doesn't exist:
+Back on your server, edit your **~/.ssh/config** file to add _bitbucket.org_ or _github.com_ as a host. This ensures that the correct key is used when connecting by SSH to target host. You'll need to create the config file if it doesn't exist:
 
 ```
-Host bitbucket.org
-    IdentityFile ~/.ssh/bitbucket_rsa
+Host github.com
+    IdentityFile ~/.ssh/<your_private_key_file>
 ```
 
-Whenever you do a git fetch Bitbucket will verify your identity automatically, without prompting you for a password.
+Whenever you do a git fetch host will verify your identity automatically, without prompting you for a password.
 
-On the Bitbucket website navigate to your repository's _Administration > Webhooks_ screen and add a new webhook, pointed to `http://<domain>/<path>/bitbucket-hook.php`.
+On the git server site navigate to your repository's _Administration > Webhooks_ screen and add a new webhook, pointed to `http://<domain>/<path>/webhook.php`.
 
 ## See also
 
