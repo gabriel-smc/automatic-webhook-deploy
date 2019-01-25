@@ -176,7 +176,7 @@ function fetchParams ()/*{{{ Get parameters from bitbucket payload now only (REP
         if (isset($PROJECTS[$REPO][$branchName])) {
             // Create branch name for checkout
             array_push($BRANCHES, $branchName);
-            _LOG("Changes in branch in branch:".$branchName);
+            _LOG("Found changes in branch: ".$branchName);
         }
     }
 
