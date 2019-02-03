@@ -1,6 +1,6 @@
 {
   "name": "automatic-webhook-deploy",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Automatic deploy for bitbucket.org or github.com webhooks",
   "author": "lilliputten <lilliputten@yandex.ru>",
   "keywords": [

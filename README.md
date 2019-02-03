@@ -53,6 +53,8 @@ Whenever you do a git fetch host will verify your identity automatically, withou
 
 On the git server site navigate to your repository's _Administration > Webhooks_ screen and add a new webhook, pointed to `http://<domain>/<path>/webhook.php`.
 
+For the github repository, you must specify the `application/json` value for the `Content-type` parameter.
+
 ## See also
 
 - [Original Jonathan Nicoal's page](http://jonathannicol.com/blog/2013/11/19/automated-git-deployments-from-bitbucket/)
