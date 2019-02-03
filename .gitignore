@@ -7,6 +7,7 @@ config.php
 *.log
 *~
 *_
+log*
 .idea
 
 # Misc dev. stuff
