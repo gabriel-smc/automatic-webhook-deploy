@@ -25,7 +25,7 @@
 $CONFIG = array(
 
     /** Git command, *REQUIRED* */
-    'gitCommand' => 'git',
+    'gitCommand' => '/usr/bin/git',
 
     /** Absolute folder containing all repositories, *REQUIRED* */
     'repositoriesPath' => '/var/www/dev/repo',
@@ -40,7 +40,7 @@ $CONFIG = array(
     'logFile' => 'github-hooks.log',
 
     /** clear log each time, optional */
-    'logClear' => false,
+    'logClear' => true,
 
     /** show extra info (eg config data) in log, optional */
     'verbose' => true,
@@ -52,7 +52,7 @@ $CONFIG = array(
     'logDebug' => false,
 
     // /** If specified then setup default php timezone (if server's PHP is misconfigured) */
-    // 'setTimezone' => 'UTC',
+    'setTimezone' => 'Australia/Melbourne',
 
 );
 
