@@ -1,11 +1,11 @@
 
-DirectoryIndex index.html
+DirectoryIndex index.php index.html
 
-php_flag display_startup_errors on
-php_flag display_errors on
-php_flag html_errors on
-php_flag log_errors on
-php_value error_log php_errors.log
+# php_flag display_startup_errors on
+# php_flag display_errors on
+# php_flag html_errors on
+# php_flag log_errors on
+# php_value error_log php_errors.log
 
 # IP rangs of bitbucket:
 #
@@ -13,8 +13,20 @@ php_value error_log php_errors.log
 #
 # See https://confluence.atlassian.com/bitbucket/manage-webhooks-735643732.html
 
-# <Limit GET POST>
-#    order deny,allow
-#    deny from all
-#    allow from 104.192.143.0/24
-# </Limit>
+<Limit GET POST>
+   order deny,allow
+   deny from all
+   # Bitbucket 
+   allow from 104.192.143.0/18
+   allow from 18.205.93.0/25
+   allow from 13.52.5.0/25
+   allow from 18.128.0.0/9 
+   # Github Hooks
+   allow from 192.30.252.0/22
+   allow from 185.199.108.0/22
+   allow from 140.82.112.0/20
+   # Gabriel
+   allow from 113.161.77.168
+   allow from 35.186.150.217
+   allow from 68.183.229.71
+</Limit>
